@@ -1,4 +1,4 @@
-from typing import Any, NamedTuple
+from typing import Any, Dict, NamedTuple, Tuple
 
 
 class PgVersion(NamedTuple):
@@ -25,3 +25,22 @@ def get_pg_version(cursor: Any) -> PgVersion:
         major = version_num // 10000
         minor = version_num % 10000
     return PgVersion(major, minor)
+
+
+def load_queries() -> Dict[str, Dict[Tuple[int, int], str]]:
+    pass
+
+
+def get_query(query_name: str, version: PgVersion) -> str:
+    """
+    Retrieve a query by name targeted at the given postgres version
+    """
+    queries = load_queries()
+    if query_name not in queries:
+        return ""
+    output = ""
+    for version_num, query in sorted(queries[query_name].items()):
+        if version_num > version:
+            break
+        output = query
+    return output

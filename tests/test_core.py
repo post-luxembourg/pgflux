@@ -1,7 +1,7 @@
 """
 This file contains example unit-tests using pytest and classical unit-tests.
 """
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -38,3 +38,28 @@ def test_get_version(version_num: int, expected: core.PgVersion):
 
     result = core.get_pg_version(mocked_cursor)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "server_version, query, expected",
+    [
+        (core.PgVersion(9, 2), "connections", "old-query"),
+        (core.PgVersion(10, 0), "connections", "connections-10.0"),
+        (core.PgVersion(12, 0), "connections", "connections-10.0"),
+        (core.PgVersion(9, 2), "unknown-query", ""),
+        (core.PgVersion(12, 0), "unknown-query", ""),
+    ],
+)
+def test_get_query(server_version: core.PgVersion, query: str, expected: str):
+    """
+    We want to load the query dynamically for the proper Postgres version
+    """
+    with patch("pgflux.core.load_queries") as load_queries:
+        load_queries.return_value = {
+            "connections": {
+                core.PgVersion(0, 0): "old-query",
+                core.PgVersion(10, 0): "connections-10.0",
+            }
+        }
+        result = core.get_query(query, server_version)
+        assert result == expected
