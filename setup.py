@@ -22,6 +22,7 @@ setup(
             "sphinx-rtd-theme",
             "mypy",
             "pylint",
+            "python-dotenv",
         ],
         "test": [
             "pytest",
