@@ -1,5 +1,5 @@
 SELECT
-    datname,
+    datname AS "tag:database",
     COALESCE(MAX(extract(EPOCH FROM NOW() - query_start)), 0),
     COALESCE(MAX(extract(EPOCH FROM NOW() - xact_start)), 0)
 FROM pg_stat_activity

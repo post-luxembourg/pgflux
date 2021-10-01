@@ -1,5 +1,5 @@
 SELECT
-    db.datname,
+    db.datname as "tag:database",
     LOWER(mode),
     locktype,
     granted,

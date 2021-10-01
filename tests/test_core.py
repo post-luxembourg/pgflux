@@ -72,3 +72,24 @@ def test_load_queries():
     assert result["connections"][core.PgVersion(0, 0)] != ""
     assert result["connections"][core.PgVersion(9, 2)] != ""
     assert result["connections"][core.PgVersion(10, 0)] != ""
+
+
+def test_execute_query():
+    """
+    Ensure we have a convenient top-level API
+    """
+    queries = core.load_queries()
+    with core.connect() as connection:
+        result = list(core.execute(connection, queries, "locks"))
+    for row in result:
+        assert isinstance(row, dict)
+
+
+def test_check_queries():
+    """
+    Ensure all bundled queries are executable
+    """
+    queries = core.load_queries()
+    with core.connect() as connection:
+        for query in queries:
+            list(core.execute(connection, queries, query))

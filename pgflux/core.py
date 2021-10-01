@@ -1,6 +1,13 @@
 import logging
+from contextlib import contextmanager
+from os import getenv
 from pathlib import Path
-from typing import Any, Dict, NamedTuple
+from typing import Any, Dict, Iterable, NamedTuple
+
+import psycopg2
+from dotenv import load_dotenv
+from psycopg2.extensions import connection
+from psycopg2.extras import DictCursor
 
 LOG = logging.getLogger(__name__)
 
@@ -8,6 +15,12 @@ LOG = logging.getLogger(__name__)
 class PgVersion(NamedTuple):
     major: int
     minor: int
+
+
+class PgFluxException(Exception):
+    """
+    Base exception for pgflux
+    """
 
 
 def get_pg_version(cursor: Any) -> PgVersion:
@@ -70,3 +83,24 @@ def get_query(
             break
         output = query
     return output
+
+
+@contextmanager  # type: ignore
+def connect() -> connection:
+    load_dotenv(".env")
+    dsn = getenv("PGFLUX_DSN", "")
+    if not dsn:
+        raise PgFluxException("PGFLUX_DSN does not seem to be set.")
+    with psycopg2.connect(dsn) as connection:  # type: ignore
+        yield connection
+
+
+def execute(
+    connection: Any, queries: Dict[str, Dict[PgVersion, str]], query_name: str
+) -> Iterable[Dict[str, Any]]:
+    with connection.cursor(cursor_factory=DictCursor) as cursor:
+        version = get_pg_version(cursor)
+        query = get_query(queries, query_name, version)
+        cursor.execute(query)
+        for row in cursor:
+            yield dict(row)
