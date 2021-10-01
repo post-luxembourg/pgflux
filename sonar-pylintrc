@@ -1,0 +1,15 @@
+[MASTER]
+ignore=.git env tests
+persistent=no
+
+[REPORTS]
+output-format=parseable
+reports=no
+
+[BASIC]
+good-names=i,j,k,x,y,z,ex,Run,_,ui,ip
+
+[MESSAGES CONTROL]
+# Let black handle whitespace & continuations
+disable=bad-whitespace,
+        bad-continuation

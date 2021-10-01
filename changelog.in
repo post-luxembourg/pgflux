@@ -1,0 +1,17 @@
+# --- Possible values for "type" ---------
+#
+#    added
+#    changed
+#    security
+#    deprecated
+#    removed
+#    support
+#    fixed
+#    doc
+
+# version   ; type    ; subject                                                           ; issues  ;i;h;date      ;detail
+#--------------------------------------------------------------------------------------------------------------------------
+0.1.0       ; support ; Initial Release                                                   ;         ; ; ;2019-02-07;
+
+
+# vim: set filetype=txt textwidth=0 :
