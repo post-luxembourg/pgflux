@@ -27,12 +27,12 @@ def get_pg_version(cursor: Any) -> PgVersion:
     return PgVersion(major, minor)
 
 
-def load_queries() -> Dict[str, Dict[Tuple[int, int], str]]:
+def load_queries() -> Dict[str, Dict[PgVersion, str]]:
     pass
 
 
 def get_query(
-    queries: Dict[str, Dict[Tuple[int, int], str]],
+    queries: Dict[str, Dict[PgVersion, str]],
     query_name: str,
     version: PgVersion,
 ) -> str:
