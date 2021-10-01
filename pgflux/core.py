@@ -1,4 +1,8 @@
-from typing import Any, Dict, NamedTuple, Tuple
+import logging
+from pathlib import Path
+from typing import Any, Dict, NamedTuple
+
+LOG = logging.getLogger(__name__)
 
 
 class PgVersion(NamedTuple):
@@ -28,7 +32,26 @@ def get_pg_version(cursor: Any) -> PgVersion:
 
 
 def load_queries() -> Dict[str, Dict[PgVersion, str]]:
-    pass
+    """
+    Load the bundled SQL queries from disk
+    """
+    here = Path(__file__).parent / "queries"
+    output: Dict[str, Dict[PgVersion, str]] = {}
+    for container in here.iterdir():
+        if not container.is_dir():
+            continue
+        tmp: Dict[PgVersion, str] = {}
+        for query_file in container.glob("*.sql"):
+            try:
+                major_str, minor_str, _ = query_file.name.split(".")
+                version = PgVersion(int(major_str), int(minor_str))
+            except ValueError as exc:
+                LOG.error("Invalid filename %s (%s)", query_file, exc)
+                continue
+
+            tmp[version] = query_file.read_text()
+        output[container.name] = tmp
+    return output
 
 
 def get_query(

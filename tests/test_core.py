@@ -62,3 +62,13 @@ def test_get_query(server_version: core.PgVersion, name: str, expected: str):
     }
     result = core.get_query(queries, name, server_version)
     assert result == expected
+
+
+def test_load_queries():
+    """
+    Ensure that we can properly load the bundled queries
+    """
+    result = core.load_queries()
+    assert result["connections"][core.PgVersion(0, 0)] != ""
+    assert result["connections"][core.PgVersion(9, 2)] != ""
+    assert result["connections"][core.PgVersion(10, 0)] != ""
