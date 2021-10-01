@@ -17,12 +17,13 @@ setup(
     ],
     extras_require={
         "dev": [
-            "recommonmark",
-            "sphinx",
-            "sphinx-rtd-theme",
+            "black",
             "mypy",
             "pylint",
             "python-dotenv",
+            "recommonmark",
+            "sphinx",
+            "sphinx-rtd-theme",
         ],
         "test": [
             "pytest",

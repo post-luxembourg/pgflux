@@ -11,5 +11,6 @@
     },
     "search.exclude": {
         "**/*.pyc": true
-    }
+    },
+    "python.formatting.provider": "black"
 }
