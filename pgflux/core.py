@@ -31,11 +31,14 @@ def load_queries() -> Dict[str, Dict[Tuple[int, int], str]]:
     pass
 
 
-def get_query(query_name: str, version: PgVersion) -> str:
+def get_query(
+    queries: Dict[str, Dict[Tuple[int, int], str]],
+    query_name: str,
+    version: PgVersion,
+) -> str:
     """
     Retrieve a query by name targeted at the given postgres version
     """
-    queries = load_queries()
     if query_name not in queries:
         return ""
     output = ""
