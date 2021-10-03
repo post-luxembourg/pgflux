@@ -1,8 +1,9 @@
 import argparse
 import sys
-from typing import TextIO
+from typing import List, TextIO
 
 from pgflux import core
+from pgflux.influx import row_to_influx, send_to_influx
 
 
 def parse_args() -> argparse.Namespace:
@@ -33,6 +34,21 @@ def list_queries(stream: TextIO) -> None:
         print(row_template % (item.query_name, item.version), file=stream)
 
 
+def execute_query(query: str, stream: TextIO) -> None:
+    queries = core.load_queries()
+    with core.connect() as connection:
+        result = list(core.execute(connection, queries, query))
+
+    payload: List[str] = []
+    for row in result:
+        try:
+            output = row_to_influx(query, row)
+            payload.append(output)
+        except core.PgFluxException as exc:
+            print(f">> ERROR in {query}: {exc}")  # XXX
+    send_to_influx("localhost:8086", "\n".join(payload))
+
+
 def main() -> int:  # pragma: no cover
     """
     Main CLI entry-point of the script
@@ -41,4 +57,6 @@ def main() -> int:  # pragma: no cover
     if args.list_queries:
         list_queries(sys.stdout)
         return 0
+    for query in args.queries:
+        execute_query(query, sys.stdout)
     return 0

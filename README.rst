@@ -25,3 +25,17 @@ Development
 * Run the tests::
 
     ./env/bin/pytest
+
+
+Setting up Influx for Testing
+=============================
+
+::
+
+    docker run \
+        -p 8086:8086 \                                                                        ✓
+        --rm \
+        --name influxdb \
+        influxdb:1.8
+    docker exec -ti influxdb influx
+    > CREATE DATABASE postgres_stats
