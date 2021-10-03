@@ -9,17 +9,6 @@ import pytest
 import pgflux.core as core
 
 
-@pytest.fixture
-def example_fixture():
-    # Do any setup code before the "yield"
-    sample_fixture_data = {"hello": "world"}
-    try:
-        yield sample_fixture_data
-    finally:
-        pass
-        # Do cleanup in the "finally" block
-
-
 @pytest.mark.parametrize(
     "version_num, expected",
     [
