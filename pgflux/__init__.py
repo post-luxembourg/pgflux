@@ -2,9 +2,9 @@
 Main package file
 """
 
-try:
+try:  # pragma: no cover
     import importlib.metadata as im
-except ImportError:
+except ImportError:  # pragma: no cover
     import importlib_metadata as im  # type: ignore
 
 
