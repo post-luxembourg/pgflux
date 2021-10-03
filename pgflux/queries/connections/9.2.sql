@@ -7,7 +7,7 @@ conntype AS (SELECT u.usename,
     FROM users u
     LEFT JOIN pg_stat_activity act USING (usename))
 SELECT
-    usename,
+    usename AS "tag:username",
     COUNT(CASE WHEN state = 'idle'
         THEN 1 END) AS idle,
     COUNT(CASE WHEN state like 'idle in transaction%'
@@ -20,7 +20,8 @@ SELECT
         THEN 1 END) AS unknown,
     COUNT(CASE WHEN state = 'active'
         THEN 1 END) AS query_running,
-    COUNT(CASE WHEN waiting THEN 1 END) AS waiting
+    COUNT(CASE WHEN waiting THEN 1 END) AS waiting,
+    EXTRACT(EPOCH FROM NOW()) * 1E9 AS "timestamp"
 FROM conntype
 WHERE COALESCE(conntype.pid, 0) <> pg_backend_pid()
 GROUP BY usename

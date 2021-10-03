@@ -1,9 +1,10 @@
 SELECT
-    SUM(heap_blks_read) AS heap_blks_read,
-    SUM(heap_blks_hit) AS heap_blks_hit,
-    SUM(idx_blks_read) AS idx_blks_read,
-    SUM(idx_blks_hit) AS idx_blks_hit,
-    SUM(toast_blks_read) AS toast_blks_read,
-    SUM(toast_blks_hit) AS toast_blks_hit,
-    SUM(tidx_blks_read) AS tidx_blks_read
+    COALESCE(0, SUM(heap_blks_read)) AS heap_blks_read,
+    COALESCE(0, SUM(heap_blks_hit)) AS heap_blks_hit,
+    COALESCE(0, SUM(idx_blks_read)) AS idx_blks_read,
+    COALESCE(0, SUM(idx_blks_hit)) AS idx_blks_hit,
+    COALESCE(0, SUM(toast_blks_read)) AS toast_blks_read,
+    COALESCE(0, SUM(toast_blks_hit)) AS toast_blks_hit,
+    COALESCE(0, SUM(tidx_blks_read)) AS tidx_blks_read,
+    EXTRACT(EPOCH FROM NOW()) * 1E9 AS "timestamp"
 FROM pg_statio_user_tables;
