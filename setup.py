@@ -1,5 +1,3 @@
-from os.path import join
-
 from setuptools import find_packages, setup
 
 setup(
@@ -14,14 +12,13 @@ setup(
     install_requires=[
         "importlib_metadata; python_version < '3.8'",
         "psycopg2-binary",
+        "python-dotenv",
     ],
+    entry_points={"console_scripts": ["pgflux=pgflux.cli:main"]},
     extras_require={
         "dev": [
             "black",
-            "mypy",
             "pylint",
-            "python-dotenv",
-            "recommonmark",
             "sphinx",
             "sphinx-rtd-theme",
         ],
