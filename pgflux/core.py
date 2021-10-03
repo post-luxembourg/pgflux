@@ -17,6 +17,9 @@ class PgVersion(NamedTuple):
     major: int
     minor: int
 
+    def __str__(self) -> str:
+        return f"{self.major}.{self.minor}"
+
 
 @dataclass
 class FileItem:
