@@ -1,6 +1,7 @@
 """
 This file contains example unit-tests using pytest and classical unit-tests.
 """
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
@@ -93,3 +94,11 @@ def test_check_queries():
     with core.connect() as connection:
         for query in queries:
             list(core.execute(connection, queries, query))
+
+
+def test_get_query_filename():
+    result = core.get_query_filename(core.PgVersion(10, 0), "connections")
+    expected = str(
+        Path(__file__).parent.parent / "pgflux/queries/connections/10.0.sql"
+    )
+    assert result == expected

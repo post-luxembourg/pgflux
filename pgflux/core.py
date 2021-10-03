@@ -1,5 +1,6 @@
 import logging
 from contextlib import contextmanager
+from dataclasses import dataclass
 from os import getenv
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple
@@ -15,6 +16,13 @@ LOG = logging.getLogger(__name__)
 class PgVersion(NamedTuple):
     major: int
     minor: int
+
+
+@dataclass
+class FileItem:
+    version: PgVersion
+    query_name: str
+    path: Path
 
 
 class PgFluxException(Exception):
@@ -44,16 +52,14 @@ def get_pg_version(cursor: Any) -> PgVersion:
     return PgVersion(major, minor)
 
 
-def load_queries() -> Dict[str, Dict[PgVersion, str]]:
+def iter_query_files() -> Iterable[FileItem]:
     """
-    Load the bundled SQL queries from disk
+    Iterate over all defined query files.
     """
     here = Path(__file__).parent / "queries"
-    output: Dict[str, Dict[PgVersion, str]] = {}
     for container in here.iterdir():
         if not container.is_dir():
             continue
-        tmp: Dict[PgVersion, str] = {}
         for query_file in container.glob("*.sql"):
             try:
                 major_str, minor_str, _ = query_file.name.split(".")
@@ -61,9 +67,40 @@ def load_queries() -> Dict[str, Dict[PgVersion, str]]:
             except ValueError as exc:
                 LOG.error("Invalid filename %s (%s)", query_file, exc)
                 continue
+            yield FileItem(version, container.name, query_file.absolute())
 
-            tmp[version] = query_file.read_text()
-        output[container.name] = tmp
+
+def get_query_filename(version: PgVersion, query_name: str) -> str:
+    """
+    Retrieve the filename where the query for *query_name* was defined.
+    """
+    items = sorted(
+        iter_query_files(), key=lambda row: (row.query_name, row.version)
+    )
+    target = None
+    for item in items:
+        if item.query_name != query_name:
+            continue
+        if item.version > version:
+            break
+        target = item.path
+    if not target:
+        raise PgFluxException(
+            f"Unable to find a file for query {query_name!r} "
+            f"in version {version.major}.{version.minor}"
+        )
+
+    return str(target.absolute())
+
+
+def load_queries() -> Dict[str, Dict[PgVersion, str]]:
+    """
+    Load the bundled SQL queries from disk
+    """
+    output: Dict[str, Dict[PgVersion, str]] = {}
+    for item in iter_query_files():
+        tmp: Dict[PgVersion, str] = output.setdefault(item.query_name, {})
+        tmp[item.version] = item.path.read_text()
     return output
 
 
@@ -104,9 +141,9 @@ def execute(
         try:
             cursor.execute(query)
         except Exception as exc:
+            filename = get_query_filename(version, query_name)
             raise PgFluxException(
-                f"Unable to execute query {query_name!r} for PG-version "
-                f"{version.major}.{version.minor}"
+                f"Unable to execute query {query_name!r} from {filename!r}"
             ) from exc
         for row in cursor:
             yield dict(row)
