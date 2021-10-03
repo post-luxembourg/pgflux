@@ -101,6 +101,12 @@ def execute(
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         version = get_pg_version(cursor)
         query = get_query(queries, query_name, version)
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as exc:
+            raise PgFluxException(
+                f"Unable to execute query {query_name!r} for PG-version "
+                f"{version.major}.{version.minor}"
+            ) from exc
         for row in cursor:
             yield dict(row)
