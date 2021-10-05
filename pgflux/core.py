@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from copy import copy
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from os import getenv
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple
@@ -243,6 +244,7 @@ def with_server_metadata(
     return output
 
 
+@lru_cache(maxsize=None)
 def list_databases(connection: Any) -> Iterable[str]:
     query = (
         'SELECT datname as "database" '
