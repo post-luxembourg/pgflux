@@ -236,7 +236,6 @@ def with_server_metadata(
     output: Dict[str, Any] = dict(row)  # type: ignore
     if dbname:
         output["tag:dbname"] = dbname
-    output["tag:server_version"] = f"'{server_version}'"
     output["tag:server_version_num"] = server_version_num
     output["tag:server_port"] = port
     if "host" in params:
