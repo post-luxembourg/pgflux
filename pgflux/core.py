@@ -1,6 +1,7 @@
 import logging
 from contextlib import contextmanager
 from dataclasses import dataclass
+from enum import Enum
 from os import getenv
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple
@@ -21,12 +22,17 @@ class PgVersion(NamedTuple):
         return f"{self.major}.{self.minor}"
 
 
+class Scope(Enum):
+    CLUSTER = "cluster"
+    DB = "db"
+
+
 @dataclass
 class FileItem:
     version: PgVersion
     query_name: str
     path: Path
-    scope: str
+    scope: Scope
 
 
 @dataclass
@@ -74,12 +80,12 @@ def get_pg_version(cursor: Any) -> PgVersion:
     return PgVersion(major, minor)
 
 
-def iter_query_files(scope: str) -> Iterable[FileItem]:
+def iter_query_files(scope: Scope) -> Iterable[FileItem]:
     """
     Iterate over all defined query files.
     """
     here = Path(__file__).parent / "queries"
-    for container in (here / scope).iterdir():
+    for container in (here / scope.value).iterdir():
         if not container.is_dir():
             continue
         for query_file in container.glob("*.sql"):
@@ -100,18 +106,20 @@ def load_queries() -> QueryCollection:
     """
     output_cluster: Dict[str, Dict[PgVersion, str]] = {}
     output_db: Dict[str, Dict[PgVersion, str]] = {}
-    for item in iter_query_files("cluster"):
+    for item in iter_query_files(Scope.CLUSTER):
         tmp: Dict[PgVersion, str] = output_cluster.setdefault(
             item.query_name, {}
         )
         tmp[item.version] = item.path.read_text()
-    for item in iter_query_files("db"):
+    for item in iter_query_files(Scope.DB):
         tmp: Dict[PgVersion, str] = output_db.setdefault(item.query_name, {})
         tmp[item.version] = item.path.read_text()
     return QueryCollection(output_cluster, output_db)
 
 
-def get_query_filename(version: PgVersion, scope: str, query_name: str) -> str:
+def get_query_filename(
+    version: PgVersion, scope: Scope, query_name: str
+) -> str:
     """
     Retrieve the filename where the query for *query_name* was defined.
     """
@@ -171,7 +179,7 @@ def execute_global(
         try:
             cursor.execute(query)
         except Exception as exc:
-            filename = get_query_filename(version, "cluster", query_name)
+            filename = get_query_filename(version, Scope.CLUSTER, query_name)
             raise PgFluxException(
                 f"Unable to execute query {query_name!r} from {filename!r}"
             ) from exc

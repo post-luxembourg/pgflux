@@ -105,7 +105,7 @@ def test_check_queries():
 
 def test_get_query_filename():
     result = core.get_query_filename(
-        core.PgVersion(10, 0), "cluster", "connections"
+        core.PgVersion(10, 0), core.Scope.CLUSTER, "connections"
     )
     expected = str(
         Path(__file__).parent.parent
