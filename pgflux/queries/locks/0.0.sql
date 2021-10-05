@@ -4,7 +4,7 @@ SELECT
     locktype AS "tag:locktype",
     granted AS "tag:granted",
     COUNT(mode),
-    EXTRACT(EPOCH FROM NOW()) * 1E9 AS "timestamp"
+    EXTRACT(EPOCH FROM NOW()) AS "timestamp"
 FROM pg_database db
 FULL OUTER JOIN pg_locks lck ON (db.oid=lck.database)
 GROUP BY db.datname, mode, locktype, granted;

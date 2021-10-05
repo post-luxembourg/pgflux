@@ -49,7 +49,7 @@ def row_to_influx(measurement: str, row: Dict[str, Any]) -> str:
 
 
 def send_to_influx(host: str, payload: str) -> None:
-    params = urllib.parse.urlencode({"db": "postgres_stats"})
+    params = urllib.parse.urlencode({"db": "postgres_stats", "presision": "s"})
     headers = {"Content-type": "text/plain"}
     conn = http.client.HTTPConnection(host)
     conn.request("POST", f"/write?{params}", payload, headers)

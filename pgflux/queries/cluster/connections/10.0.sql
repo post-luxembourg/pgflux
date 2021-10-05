@@ -21,7 +21,7 @@ SELECT
     COUNT(CASE WHEN state = 'active'
         THEN 1 END) AS query_running,
     COUNT(CASE WHEN waiting THEN 1 END) AS waiting,
-    EXTRACT(EPOCH FROM NOW()) * 1E9 AS "timestamp"
+    EXTRACT(EPOCH FROM NOW()) AS "timestamp"
 FROM conntype
 WHERE COALESCE(conntype.pid, 0) <> pg_backend_pid()
 GROUP BY usename

@@ -12,7 +12,7 @@ SELECT
     ) AS toast_size,
     SUM(pg_indexes_size(oid)) AS indexes_size,
     pg_database_size(current_database()) AS database_size,
-    EXTRACT(EPOCH FROM NOW()) * 1E9 AS "timestamp"
+    EXTRACT(EPOCH FROM NOW()) AS "timestamp"
     FROM pg_class
     WHERE relkind not in ('t', 'i')
     AND NOT relisshared;
