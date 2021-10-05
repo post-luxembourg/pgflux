@@ -1,9 +1,12 @@
 import argparse
+import logging
 import sys
 from typing import Dict, List, TextIO
 
 from pgflux import core
 from pgflux.influx import row_to_influx, send_to_influx
+
+LOG = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
@@ -73,7 +76,7 @@ def execute_query(query: str, stream: TextIO) -> None:
             output = row_to_influx(query_name, row)
             payload.append(output)
         except core.PgFluxException as exc:
-            print(f">> ERROR in {query_name}: {exc}")  # XXX
+            LOG.error("ERROR in %s: %s", query_name, exc)
     send_to_influx("localhost:8086", "\n".join(payload))
 
 

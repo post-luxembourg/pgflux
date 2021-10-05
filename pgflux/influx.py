@@ -1,8 +1,11 @@
 import http.client
+import logging
 import urllib.parse
 from typing import Any, Dict, List, Union
 
 from pgflux.core import PgFluxException
+
+LOG = logging.getLogger(__name__)
 
 
 def with_type(value: Union[int, str, float, bool]) -> str:

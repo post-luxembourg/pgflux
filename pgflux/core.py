@@ -214,8 +214,8 @@ def execute_local(
                 cursor.execute(query)  # type: ignore
                 for row in cursor:  # type: ignore
                     yield with_server_metadata(local_connection, row, dbname)
-    except OperationalError as exc:  # type: ignore
-        print("ERROR>>", exc)  # XXX
+    except OperationalError:  # type: ignore
+        LOG.error(f"Unable to connect to {dbname}", exc_info=True)
 
 
 def with_server_metadata(
