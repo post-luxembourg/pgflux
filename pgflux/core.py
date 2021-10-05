@@ -207,3 +207,14 @@ def execute_local(
         cursor.execute(query)
         for row in cursor:
             yield dict(row)
+
+
+def list_databases(connection: Any) -> Iterable[str]:
+    query = (
+        'SELECT datname as "database" '
+        "FROM pg_database WHERE datistemplate=false;"
+    )
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        for (row,) in cursor:
+            yield row
