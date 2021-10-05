@@ -14,11 +14,17 @@ def parse_args() -> argparse.Namespace:
 
 
 def list_queries(stream: TextIO) -> None:
+    list_queries_internal("cluster", stream)
+    list_queries_internal("db", stream)
+
+
+def list_queries_internal(scope: str, stream: TextIO) -> None:
     """
     Print all supported queries into the given stream
     """
     items = sorted(
-        core.iter_query_files(), key=lambda row: (row.query_name, row.version)
+        core.iter_query_files("cluster"),
+        key=lambda row: (row.query_name, row.version),
     )
     header = ("Query Name", "Minimal PG Version")
     query_name_size = len(header[0])
@@ -26,18 +32,24 @@ def list_queries(stream: TextIO) -> None:
     for row in items:
         query_name_size = max(len(str(row.query_name)), query_name_size)
         version_size = max(len(str(row.version)), version_size)
-    row_template = f"│ %-{query_name_size}s │ %{version_size}s │"
-    header_str = f"│ %-{query_name_size}s │ %{version_size}s │" % header
+    row_template = f"│ %-7s │ %-{query_name_size}s │ %{version_size}s │"
+    header_str = (
+        f"│ Scope   │ %-{query_name_size}s │ %{version_size}s │" % header
+    )
+    print("─" * len(header_str), file=stream)
     print(header_str, file=stream)
     print("─" * len(header_str), file=stream)
     for item in items:
-        print(row_template % (item.query_name, item.version), file=stream)
+        print(
+            row_template % (scope, item.query_name, item.version), file=stream
+        )
+    print("─" * len(header_str), file=stream)
 
 
 def execute_query(query: str, stream: TextIO) -> None:
     queries = core.load_queries()
     with core.connect() as connection:
-        result = list(core.execute(connection, queries, query))
+        result = list(core.execute_global(connection, queries.cluster, query))
 
     payload: List[str] = []
     for row in result:

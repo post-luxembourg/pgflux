@@ -26,6 +26,25 @@ class FileItem:
     version: PgVersion
     query_name: str
     path: Path
+    scope: str
+
+
+@dataclass
+class QueryCollection:
+    """
+    A collection of queries to run against either the whole DB cluster, or a
+    specific DB.
+
+    Some queries return statistics relative to the active client-connection.
+    Others report values of the whole cluster and can be run from any
+    connection.
+    """
+
+    #: Queries to be run against the whole cluster
+    cluster: Dict[str, Dict[PgVersion, str]]
+
+    #: Queries to be run against a single DB
+    db: Dict[str, Dict[PgVersion, str]]
 
 
 class PgFluxException(Exception):
@@ -55,12 +74,12 @@ def get_pg_version(cursor: Any) -> PgVersion:
     return PgVersion(major, minor)
 
 
-def iter_query_files() -> Iterable[FileItem]:
+def iter_query_files(scope: str) -> Iterable[FileItem]:
     """
     Iterate over all defined query files.
     """
     here = Path(__file__).parent / "queries"
-    for container in here.iterdir():
+    for container in (here / scope).iterdir():
         if not container.is_dir():
             continue
         for query_file in container.glob("*.sql"):
@@ -70,15 +89,34 @@ def iter_query_files() -> Iterable[FileItem]:
             except ValueError as exc:
                 LOG.error("Invalid filename %s (%s)", query_file, exc)
                 continue
-            yield FileItem(version, container.name, query_file.absolute())
+            yield FileItem(
+                version, container.name, query_file.absolute(), scope
+            )
 
 
-def get_query_filename(version: PgVersion, query_name: str) -> str:
+def load_queries() -> QueryCollection:
+    """
+    Load the bundled SQL queries from disk
+    """
+    output_cluster: Dict[str, Dict[PgVersion, str]] = {}
+    output_db: Dict[str, Dict[PgVersion, str]] = {}
+    for item in iter_query_files("cluster"):
+        tmp: Dict[PgVersion, str] = output_cluster.setdefault(
+            item.query_name, {}
+        )
+        tmp[item.version] = item.path.read_text()
+    for item in iter_query_files("db"):
+        tmp: Dict[PgVersion, str] = output_db.setdefault(item.query_name, {})
+        tmp[item.version] = item.path.read_text()
+    return QueryCollection(output_cluster, output_db)
+
+
+def get_query_filename(version: PgVersion, scope: str, query_name: str) -> str:
     """
     Retrieve the filename where the query for *query_name* was defined.
     """
     items = sorted(
-        iter_query_files(), key=lambda row: (row.query_name, row.version)
+        iter_query_files(scope), key=lambda row: (row.query_name, row.version)
     )
     target = None
     for item in items:
@@ -94,17 +132,6 @@ def get_query_filename(version: PgVersion, query_name: str) -> str:
         )
 
     return str(target.absolute())
-
-
-def load_queries() -> Dict[str, Dict[PgVersion, str]]:
-    """
-    Load the bundled SQL queries from disk
-    """
-    output: Dict[str, Dict[PgVersion, str]] = {}
-    for item in iter_query_files():
-        tmp: Dict[PgVersion, str] = output.setdefault(item.query_name, {})
-        tmp[item.version] = item.path.read_text()
-    return output
 
 
 def get_query(
@@ -135,7 +162,7 @@ def connect() -> connection:
         yield connection
 
 
-def execute(
+def execute_global(
     connection: Any, queries: Dict[str, Dict[PgVersion, str]], query_name: str
 ) -> Iterable[Dict[str, Any]]:
     with connection.cursor(cursor_factory=DictCursor) as cursor:
@@ -144,9 +171,23 @@ def execute(
         try:
             cursor.execute(query)
         except Exception as exc:
-            filename = get_query_filename(version, query_name)
+            filename = get_query_filename(version, "cluster", query_name)
             raise PgFluxException(
                 f"Unable to execute query {query_name!r} from {filename!r}"
             ) from exc
+        for row in cursor:
+            yield dict(row)
+
+
+def execute_local(
+    connection: Any,
+    queries: Dict[str, Dict[PgVersion, str]],
+    dbname: str,
+    query_name: str,
+) -> Iterable[Dict[str, Any]]:
+    with connection.cursor(cursor_factory=DictCursor) as cursor:
+        version = get_pg_version(cursor)
+        query = get_query(queries, query_name, version)
+        cursor.execute(query)
         for row in cursor:
             yield dict(row)

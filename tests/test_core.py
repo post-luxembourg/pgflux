@@ -58,19 +58,35 @@ def test_load_queries():
     """
     Ensure that we can properly load the bundled queries
     """
-    result = core.load_queries()
-    assert result["connections"][core.PgVersion(0, 0)] != ""
-    assert result["connections"][core.PgVersion(9, 2)] != ""
-    assert result["connections"][core.PgVersion(10, 0)] != ""
+    queries = core.load_queries()
+    assert queries.cluster["connections"][core.PgVersion(0, 0)] != ""
+    assert queries.cluster["connections"][core.PgVersion(9, 2)] != ""
+    assert queries.cluster["connections"][core.PgVersion(10, 0)] != ""
+    assert queries.db["index_io"][core.PgVersion(0, 0)] != ""
 
 
-def test_execute_query():
+def test_execute_global_query():
     """
-    Ensure we have a convenient top-level API
+    Ensure we can run "global" queries against the whole cluster conveniently
     """
     queries = core.load_queries()
     with core.connect() as connection:
-        result = list(core.execute(connection, queries, "locks"))
+        result = list(
+            core.execute_global(connection, queries.cluster, "connections")
+        )
+    for row in result:
+        assert isinstance(row, dict)
+
+
+def test_execute_local_query():
+    """
+    Ensure we can run "local" queries against a single db conveniently
+    """
+    queries = core.load_queries()
+    with core.connect() as connection:
+        result = list(
+            core.execute_local(connection, queries.db, "dbname", "index_io")
+        )
     for row in result:
         assert isinstance(row, dict)
 
@@ -81,13 +97,18 @@ def test_check_queries():
     """
     queries = core.load_queries()
     with core.connect() as connection:
-        for query in queries:
-            list(core.execute(connection, queries, query))
+        for query in queries.cluster:
+            list(core.execute_global(connection, queries.cluster, query))
+        for query in queries.db:
+            list(core.execute_local(connection, queries.db, "postgres", query))
 
 
 def test_get_query_filename():
-    result = core.get_query_filename(core.PgVersion(10, 0), "connections")
+    result = core.get_query_filename(
+        core.PgVersion(10, 0), "cluster", "connections"
+    )
     expected = str(
-        Path(__file__).parent.parent / "pgflux/queries/connections/10.0.sql"
+        Path(__file__).parent.parent
+        / "pgflux/queries/cluster/connections/10.0.sql"
     )
     assert result == expected
