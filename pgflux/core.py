@@ -176,6 +176,10 @@ def execute_global(
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         version = get_pg_version(cursor)
         query = get_query(queries, query_name, version)
+        if not query:
+            raise PgFluxException(
+                f"Unable to load query {query_name!r} in version {version}"
+            )
         try:
             cursor.execute(query)
         except Exception as exc:
@@ -196,6 +200,10 @@ def execute_local(
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         version = get_pg_version(cursor)
         query = get_query(queries, query_name, version)
+        if not query:
+            raise PgFluxException(
+                f"Unable to load query {query_name!r} in version {version}"
+            )
         cursor.execute(query)
         for row in cursor:
             yield dict(row)
