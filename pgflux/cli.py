@@ -4,7 +4,7 @@ import sys
 from typing import Dict, List, TextIO
 
 from pgflux import core
-from pgflux.influx import row_to_influx, send_to_influx
+from pgflux.influx import connect, row_to_influx, send_to_influx
 
 LOG = logging.getLogger(__name__)
 
@@ -74,11 +74,13 @@ def execute_query(query: str, stream: TextIO) -> None:
     payload: List[str] = []
     for row in result:
         try:
-            output = row_to_influx(query_name, row)
+            output = row_to_influx(query_name, row, prefix="postgres_")
             payload.append(output)
         except core.PgFluxException as exc:
             LOG.error("ERROR in %s: %s", query_name, exc)
-    send_to_influx("localhost:8086", "\n".join(payload))
+    with connect() as influx_meta:
+        connection, headers, params = influx_meta
+        send_to_influx(connection, headers, params, "\n".join(payload))
 
 
 def main() -> int:  # pragma: no cover

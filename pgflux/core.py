@@ -166,7 +166,7 @@ def get_query(
 @contextmanager  # type: ignore
 def connect() -> connection:
     load_dotenv(".env")
-    dsn = getenv("PGFLUX_DSN", "")
+    dsn = getenv("PGFLUX_POSTGRES_DSN", "")
     if not dsn:
         raise PgFluxException("PGFLUX_DSN does not seem to be set.")
     with psycopg2.connect(dsn) as connection:  # type: ignore

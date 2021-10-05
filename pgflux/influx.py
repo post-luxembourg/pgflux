@@ -1,7 +1,12 @@
 import http.client
 import logging
 import urllib.parse
-from typing import Any, Dict, List, Union
+from base64 import b64encode
+from contextlib import contextmanager
+from os import getenv
+from typing import Any, Dict, List, Tuple, Union
+
+from dotenv import load_dotenv
 
 from pgflux.core import PgFluxException
 
@@ -14,7 +19,7 @@ def with_type(value: Union[int, str, float, bool]) -> str:
     return str(value)
 
 
-def row_to_influx(measurement: str, row: Dict[str, Any]) -> str:
+def row_to_influx(measurement: str, row: Dict[str, Any], prefix="") -> str:
     """
     Convert db-results from PostgreSQL into a line for InfluxDB line-protocol
 
@@ -45,15 +50,40 @@ def row_to_influx(measurement: str, row: Dict[str, Any]) -> str:
         tag_component = ""
     field_component = ",".join(fields)
 
-    return f"{measurement}{tag_component} {field_component} {timestamp}"
+    return f"{prefix}{measurement}{tag_component} {field_component} {timestamp}"
 
 
-def send_to_influx(host: str, payload: str) -> None:
-    params = urllib.parse.urlencode({"db": "postgres_stats", "presision": "s"})
-    headers = {"Content-type": "text/plain"}
-    conn = http.client.HTTPConnection(host)
-    conn.request("POST", f"/write?{params}", payload, headers)
-    response = conn.getresponse()
-    print(response.status, response.reason)
-    print(response.read())
-    conn.close()
+@contextmanager  # type: ignore
+def connect() -> Tuple[
+    http.client.HTTPSConnection, Dict[str, str], Dict[str, str]
+]:
+    load_dotenv(".env")
+    host = getenv("PGFLUX_INFLUX_HOST", "")
+    username = getenv("PGFLUX_INFLUX_USERNAME", "")
+    password = getenv("PGFLUX_INFLUX_PASSWORD", "")
+    dbname = getenv("PGFLUX_INFLUX_DBNAME", "")
+    if not all([host, username, password, dbname]):
+        raise PgFluxException("PGFLUX_INFLUX* do not seem to be set.")
+    token = b64encode(f"{username}:{password}".encode("ascii")).decode("ascii")
+    params = {"db": dbname, "precision": "s"}
+    headers = {
+        "Content-type": "text/plain",
+        "Authorization": f"BASIC {token}",
+    }
+    conn = http.client.HTTPSConnection(host)
+    try:
+        yield conn, headers, params
+    finally:
+        conn.close()
+
+
+def send_to_influx(
+    connection: http.client.HTTPSConnection,
+    headers: Dict[str, str],
+    params: Dict[str, str],
+    payload: str,
+) -> http.client.HTTPResponse:
+    params_encoded = urllib.parse.urlencode(params)
+    connection.request("POST", f"/write?{params_encoded}", payload, headers)
+    response = connection.getresponse()
+    return response
