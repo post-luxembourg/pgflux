@@ -13,6 +13,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("queries", nargs="*")
     parser.add_argument("--list-queries", action="store_true", default=False)
+    parser.add_argument("--all", action="store_true", default=False)
     return parser.parse_args()
 
 
@@ -88,6 +89,18 @@ def main() -> int:  # pragma: no cover
     if args.list_queries:
         list_queries(sys.stdout)
         return 0
-    for query in args.queries:
-        execute_query(query, sys.stdout)
+    if args.all:
+        queries = {
+            f"{core.Scope.CLUSTER.value}:{query.query_name}"
+            for query in core.iter_query_files(core.Scope.CLUSTER)
+        }
+        queries |= {
+            f"{core.Scope.DB.value}:{query.query_name}"
+            for query in core.iter_query_files(core.Scope.DB)
+        }
+        for query in queries:
+            execute_query(query, sys.stdout)
+    else:
+        for query in args.queries:
+            execute_query(query, sys.stdout)
     return 0
