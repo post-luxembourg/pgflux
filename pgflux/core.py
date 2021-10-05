@@ -1,5 +1,6 @@
 import logging
 from contextlib import contextmanager
+from copy import copy
 from dataclasses import dataclass
 from enum import Enum
 from os import getenv
@@ -8,6 +9,7 @@ from typing import Any, Dict, Iterable, NamedTuple
 
 import psycopg2
 from dotenv import load_dotenv
+from psycopg2.errors import OperationalError
 from psycopg2.extensions import connection
 from psycopg2.extras import DictCursor
 
@@ -188,7 +190,7 @@ def execute_global(
                 f"Unable to execute query {query_name!r} from {filename!r}"
             ) from exc
         for row in cursor:
-            yield dict(row)
+            yield with_server_metadata(connection, dict(row))
 
 
 def execute_local(
@@ -197,16 +199,48 @@ def execute_local(
     dbname: str,
     query_name: str,
 ) -> Iterable[Dict[str, Any]]:
-    with connection.cursor(cursor_factory=DictCursor) as cursor:
-        version = get_pg_version(cursor)
-        query = get_query(queries, query_name, version)
-        if not query:
-            raise PgFluxException(
-                f"Unable to load query {query_name!r} in version {version}"
-            )
-        cursor.execute(query)
-        for row in cursor:
-            yield dict(row)
+    params = copy(connection.info.dsn_parameters)
+    params["password"] = connection.info.password
+    params["dbname"] = dbname
+    try:
+        with psycopg2.connect(**params) as local_connection:  # type: ignore
+            with local_connection.cursor(cursor_factory=DictCursor) as cursor:  # type: ignore
+                version = get_pg_version(cursor)
+                query = get_query(queries, query_name, version)
+                if not query:
+                    raise PgFluxException(
+                        f"Unable to load query {query_name!r} in version {version}"
+                    )
+                cursor.execute(query)  # type: ignore
+                for row in cursor:  # type: ignore
+                    yield with_server_metadata(local_connection, row, dbname)
+    except OperationalError as exc:  # type: ignore
+        print("ERROR>>", exc)  # XXX
+
+
+def with_server_metadata(
+    connection: Any, row: Any, dbname: str = ""
+) -> Dict[str, str]:
+    """
+    Retrieve metadata about the PostgreSQL cluster
+    """
+    params = copy(connection.info.dsn_parameters)
+    with connection.cursor() as cursor:
+        cursor.execute("SHOW server_version")
+        server_version = cursor.fetchone()[0]
+        cursor.execute("SHOW server_version_num")
+        server_version_num = cursor.fetchone()[0]
+        cursor.execute("SHOW port")
+        port = cursor.fetchone()[0]
+    output: Dict[str, Any] = dict(row)  # type: ignore
+    if dbname:
+        output["tag:dbname"] = dbname
+    output["tag:server_version"] = f"'{server_version}'"
+    output["tag:server_version_num"] = server_version_num
+    output["tag:server_port"] = port
+    if "host" in params:
+        output["tag:host"] = params["host"]
+    return output
 
 
 def list_databases(connection: Any) -> Iterable[str]:

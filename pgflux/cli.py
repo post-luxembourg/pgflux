@@ -1,6 +1,6 @@
 import argparse
 import sys
-from typing import List, TextIO
+from typing import Dict, List, TextIO
 
 from pgflux import core
 from pgflux.influx import row_to_influx, send_to_influx
@@ -51,16 +51,17 @@ def execute_query(query: str, stream: TextIO) -> None:
     scope_str, _, query_name = query.partition(":")
     scope = core.Scope(scope_str)
     queries = core.load_queries()
+    result: List[Dict[str, str]] = []
     with core.connect() as connection:
         if scope == core.Scope.CLUSTER:
-            result = list(
+            result.extend(
                 core.execute_global(connection, queries.cluster, query_name)
             )
         elif scope == core.Scope.DB:
             for dbname in core.list_databases(connection):
-                result = list(
+                result.extend(
                     core.execute_local(
-                        connection, queries.cluster, dbname, query_name
+                        connection, queries.db, dbname, query_name
                     )
                 )
         else:
