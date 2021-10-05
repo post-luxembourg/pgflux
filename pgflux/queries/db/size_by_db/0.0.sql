@@ -1,5 +1,3 @@
--- TODO: This only works for the current connection I think? Do we need to open
--- a separate connection for each DB? I hope not!
 SELECT
     SUM(pg_relation_size(oid, 'main')) AS main_size,
     SUM(pg_relation_size(oid, 'vm')) AS vm_size,
