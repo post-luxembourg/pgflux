@@ -15,6 +15,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--list-queries", action="store_true", default=False)
     parser.add_argument("--all", action="store_true", default=False)
     parser.add_argument("--exclude", action="append")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False)
     return parser.parse_args()
 
 
@@ -84,6 +85,16 @@ def execute_query(query: str, exclude: List[str], stream: TextIO) -> None:
         send_to_influx(connection, headers, params, "\n".join(payload))
 
 
+def setup_logging(is_verbose: bool = False) -> None:
+    """
+    Enables logging if *is_verbose* is true. Otherwise this is a no-op.
+    """
+    if not is_verbose:
+        return
+    format = "%(asctime)-15s | %(levelname)-8s | %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=format)
+
+
 def main() -> int:  # pragma: no cover
     """
     Main CLI entry-point of the script
@@ -92,6 +103,8 @@ def main() -> int:  # pragma: no cover
     if args.list_queries:
         list_queries(sys.stdout)
         return 0
+    setup_logging(args.verbose)
+    LOG.debug("Startup")
     if args.all:
         queries = {
             f"{core.Scope.CLUSTER.value}:{query.query_name}"
@@ -103,7 +116,9 @@ def main() -> int:  # pragma: no cover
         }
         for query in queries:
             execute_query(query, args.exclude, sys.stdout)
+        LOG.debug("Done")
     else:
         for query in args.queries:
             execute_query(query, args.exclude, sys.stdout)
+        LOG.debug("Done")
     return 0
