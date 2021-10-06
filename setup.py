@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pgflux",
-    version="0.0.0",
+    version="1.0.0a1",
     description="Script for monitoring PostgreSQL databases with InfluxDB",
     long_description=open("README.rst").read(),
     author="Michel Albert",
