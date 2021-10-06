@@ -6,5 +6,6 @@ SELECT
     COUNT(mode),
     EXTRACT(EPOCH FROM NOW()) AS "timestamp"
 FROM pg_database db
-FULL OUTER JOIN pg_locks lck ON (db.oid=lck.database)
-GROUP BY db.datname, mode, locktype, granted;
+LEFT JOIN pg_locks lck ON (db.oid=lck.database)
+GROUP BY db.datname, mode, locktype, granted
+;
