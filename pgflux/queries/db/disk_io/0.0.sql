@@ -6,5 +6,6 @@ SELECT
     COALESCE(0, SUM(toast_blks_read)) AS toast_blks_read,
     COALESCE(0, SUM(toast_blks_hit)) AS toast_blks_hit,
     COALESCE(0, SUM(tidx_blks_read)) AS tidx_blks_read,
+    COALESCE(0, SUM(tidx_blks_hit)) AS tidx_blks_hit,
     EXTRACT(EPOCH FROM NOW()) AS "timestamp"
 FROM pg_statio_user_tables;
