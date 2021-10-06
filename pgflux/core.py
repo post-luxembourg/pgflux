@@ -1,4 +1,5 @@
 import logging
+import re
 from contextlib import contextmanager
 from copy import copy
 from dataclasses import dataclass
@@ -6,7 +7,7 @@ from enum import Enum
 from functools import lru_cache
 from os import getenv
 from pathlib import Path
-from typing import Any, Dict, Iterable, NamedTuple
+from typing import Any, Dict, Iterable, List, NamedTuple
 
 import psycopg2
 from dotenv import load_dotenv
@@ -243,8 +244,14 @@ def with_server_metadata(
     return output
 
 
-@lru_cache(maxsize=None)
-def list_databases(connection: Any) -> Iterable[str]:
+def is_excluded(name: str, pattern: str) -> bool:
+    if bool(re.fullmatch(pattern, name)):
+        LOG.debug("%r was excluded by pattern %r", name, pattern)
+        return True
+    return False
+
+
+def list_databases(connection: Any, exclude: List[str]) -> Iterable[str]:
     query = (
         'SELECT datname as "database" '
         "FROM pg_database WHERE datistemplate=false;"
@@ -252,4 +259,7 @@ def list_databases(connection: Any) -> Iterable[str]:
     with connection.cursor() as cursor:
         cursor.execute(query)
         for (row,) in cursor:
+            exclusion_matches = [is_excluded(row, item) for item in exclude]
+            if any(exclusion_matches):
+                continue
             yield row

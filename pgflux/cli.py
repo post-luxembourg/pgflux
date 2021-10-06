@@ -14,6 +14,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("queries", nargs="*")
     parser.add_argument("--list-queries", action="store_true", default=False)
     parser.add_argument("--all", action="store_true", default=False)
+    parser.add_argument("--exclude", action="append")
     return parser.parse_args()
 
 
@@ -51,7 +52,7 @@ def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     print("─" * len(header_str), file=stream)
 
 
-def execute_query(query: str, stream: TextIO) -> None:
+def execute_query(query: str, exclude: List[str], stream: TextIO) -> None:
     scope_str, _, query_name = query.partition(":")
     scope = core.Scope(scope_str)
     queries = core.load_queries()
@@ -62,7 +63,7 @@ def execute_query(query: str, stream: TextIO) -> None:
                 core.execute_global(connection, queries.cluster, query_name)
             )
         elif scope == core.Scope.DB:
-            for dbname in core.list_databases(connection):
+            for dbname in core.list_databases(connection, exclude):
                 result.extend(
                     core.execute_local(
                         connection, queries.db, dbname, query_name
@@ -101,8 +102,8 @@ def main() -> int:  # pragma: no cover
             for query in core.iter_query_files(core.Scope.DB)
         }
         for query in queries:
-            execute_query(query, sys.stdout)
+            execute_query(query, args.exclude, sys.stdout)
     else:
         for query in args.queries:
-            execute_query(query, sys.stdout)
+            execute_query(query, args.exclude, sys.stdout)
     return 0
