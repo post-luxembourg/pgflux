@@ -5,7 +5,7 @@ conntype AS (SELECT u.usename,
     state,
     query
     FROM users u
-    LEFT JOIN pg_stat_activity act USING (usename))
+    INNER JOIN pg_stat_activity act USING (usename))
 SELECT
     usename AS "tag:username",
     COUNT(CASE WHEN state = 'idle'
