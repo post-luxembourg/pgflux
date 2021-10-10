@@ -1,0 +1,37 @@
+pgflux package
+==============
+
+Submodules
+----------
+
+pgflux.cli module
+-----------------
+
+.. automodule:: pgflux.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pgflux.core module
+------------------
+
+.. automodule:: pgflux.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pgflux.influx module
+--------------------
+
+.. automodule:: pgflux.influx
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pgflux
+   :members:
+   :undoc-members:
+   :show-inheritance:

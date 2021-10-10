@@ -1,0 +1,7 @@
+pgflux
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   pgflux

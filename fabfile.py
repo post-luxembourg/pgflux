@@ -58,5 +58,5 @@ def run_influx_container(context):
 def doc(context):
     context.run("./env/bin/sphinx-apidoc -o doc/api -f pgflux")
     context.run(
-        "./env/bin/sphinx-build -a doc/ doc/_build", pty=True, replace_env=False
+        "./env/bin/sphinx-build -a doc/ gh-pages", pty=True, replace_env=False
     )
