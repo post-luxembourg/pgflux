@@ -7,35 +7,31 @@ A simple Python utility to send PostgreSQL metrics to InfluxDB
 Development
 ===========
 
-* Set up development environment::
+NOTE
+----
+
+This project uses ``fabric`` as task runner (see https://fabfile.org). To
+install it use either ``pipx install fabric`` (recommended) or, if you don't
+have ``pipx``: ``pip install --user fabric``.
+
+Commands
+--------
+
+* To set up or refresh the development environment::
 
     fab develop
 
-* Run a docker container for testing::
+* Environment Variables can be set via a ``.env`` file (see ``.env.template``
+  as example).
 
-    docker run --rm \
-        -e POSTGRES_PASSWORD=mys3cr37passw0rd \
-        -p <hostport>:5432 \
-        postgresql:latest
+* Run a PostgreSQL instance for testing::
 
-* Create a ``.env`` file (use ``.env.template`` as guide)::
+  fab run-postgres-container
 
-    PGFLUX_DSN=postgresql://postgres:mys3cr37passw0rd@localhost:<hostport>/postgres
+* Run a InfluxDB instance for testing::
+
+  fab run-influx-container
 
 * Run the tests::
 
     ./env/bin/pytest
-
-
-Setting up Influx for Testing
-=============================
-
-::
-
-    docker run \
-        -p 8086:8086 \                                                                        ✓
-        --rm \
-        --name influxdb \
-        influxdb:1.8
-    docker exec -ti influxdb influx
-    > CREATE DATABASE postgres_stats
