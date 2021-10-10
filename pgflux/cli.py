@@ -1,7 +1,7 @@
 import argparse
 import logging
 import sys
-from typing import Dict, List, TextIO
+from typing import Dict, List, Optional, TextIO
 
 from pgflux import core
 from pgflux.influx import connect, row_to_influx, send_to_influx
@@ -9,14 +9,26 @@ from pgflux.influx import connect, row_to_influx, send_to_influx
 LOG = logging.getLogger(__name__)
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
+    """
+    Parse command-line arguments
+    """
     parser = argparse.ArgumentParser()
-    parser.add_argument("queries", nargs="*")
-    parser.add_argument("--list-queries", action="store_true", default=False)
+    parser.add_argument(
+        "queries",
+        nargs="*",
+        help="The query to be run against the PostgreSQL cluster (can be specified multiple times)",
+    )
+    parser.add_argument(
+        "--list-queries",
+        action="store_true",
+        default=False,
+        help="List all available PostgreSQL queries by name and exit.",
+    )
     parser.add_argument("--all", action="store_true", default=False)
     parser.add_argument("--exclude", action="append")
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def list_queries(stream: TextIO) -> None:
