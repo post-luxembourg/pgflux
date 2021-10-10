@@ -1,7 +1,4 @@
-pgflux
-======
-
-TODO Write Documentation
+.. include:: ../README.rst
 
 
 Documents
@@ -10,7 +7,7 @@ Documents
 .. toctree::
     :maxdepth: 1
 
-    <changelog>
+    api/pgflux
 
 
 Indices and tables

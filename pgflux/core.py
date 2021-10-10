@@ -4,10 +4,17 @@ from contextlib import contextmanager
 from copy import copy
 from dataclasses import dataclass
 from enum import Enum
-from functools import lru_cache
 from os import getenv
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, NamedTuple
+from typing import (
+    Any,
+    Dict,
+    Iterable,
+    List,
+    Mapping,
+    MutableMapping,
+    NamedTuple,
+)
 
 import psycopg2
 from dotenv import load_dotenv
@@ -19,6 +26,10 @@ LOG = logging.getLogger(__name__)
 
 
 class PgVersion(NamedTuple):
+    """
+    A simple data-type to represent the detected PostgreSQL version.
+    """
+
     major: int
     minor: int
 
@@ -27,15 +38,32 @@ class PgVersion(NamedTuple):
 
 
 class Scope(Enum):
+    """
+    The possible scopes for queries
+    """
+
+    #: "cluster" contains all queries which can be run against the whole cluster
     CLUSTER = "cluster"
+    #: "db" contains all queries which have to be run against a specific
+    #: connection
     DB = "db"
 
 
 @dataclass
 class FileItem:
+    """
+    A FileItem represents a reference to a SQL file containing a query that can
+    be run against a specific PostgreSQL version (including whether it's
+    cluster-global or db-local)
+    """
+
+    #: The detected PostgreSQL version
     version: PgVersion
+    #: The name of the query contained in the file
     query_name: str
+    #: The path of the SQL file
     path: Path
+    #: Whether the query is cluster-global or db-local
     scope: Scope
 
 
@@ -87,6 +115,8 @@ def get_pg_version(cursor: Any) -> PgVersion:
 def iter_query_files(scope: Scope) -> Iterable[FileItem]:
     """
     Iterate over all defined query files.
+
+    :param scope: Only return queries from the given scope.
     """
     here = Path(__file__).parent / "queries"
     for container in (here / scope.value).iterdir():
@@ -126,6 +156,10 @@ def get_query_filename(
 ) -> str:
     """
     Retrieve the filename where the query for *query_name* was defined.
+
+    :param version: The detected PostgreSQL version
+    :param scope: Whether the query is cluster-global or db-local
+    :param query_name: The name of the query to look-up
     """
     items = sorted(
         iter_query_files(scope), key=lambda row: (row.query_name, row.version)
@@ -152,7 +186,8 @@ def get_query(
     version: PgVersion,
 ) -> str:
     """
-    Retrieve a query by name targeted at the given postgres version
+    Retrieve a query from a collection of queries by name targeted at the given
+    postgres version
     """
     if query_name not in queries:
         return ""
@@ -166,6 +201,13 @@ def get_query(
 
 @contextmanager  # type: ignore
 def connect() -> connection:
+    """
+    Create a new database connection using the ``PGFLUX_POSTGRES_DSN``
+    environment variable.
+
+    The variable is also loaded from a ``.env`` file in the current working
+    folder if it exists.
+    """
     load_dotenv(".env")
     dsn = getenv("PGFLUX_POSTGRES_DSN", "")
     if not dsn:
@@ -177,6 +219,14 @@ def connect() -> connection:
 def execute_global(
     connection: Any, queries: Dict[str, Dict[PgVersion, str]], query_name: str
 ) -> Iterable[Dict[str, Any]]:
+    """
+    Execute a query (by name) against the database cluster and return all rows.
+
+    :param connection: A reference to the DB cluster
+    :param queries: A collection of queries
+    :param query_name: The name of the query to execute
+    :return: An iterable over the rows (columns depend on the executed query)
+    """
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         version = get_pg_version(cursor)
         query = get_query(queries, query_name, version)
@@ -198,9 +248,18 @@ def execute_global(
 def execute_local(
     connection: Any,
     queries: Dict[str, Dict[PgVersion, str]],
-    dbname: str,
     query_name: str,
+    dbname: str,
 ) -> Iterable[Dict[str, Any]]:
+    """
+    Execute a query (by name) against the database cluster and return all rows.
+
+    :param connection: A reference to the DB cluster
+    :param queries: A collection of queries
+    :param query_name: The name of the query to execute
+    :param dbname: The name of the database to connect to
+    :return: An iterable over the rows (columns depend on the executed query)
+    """
     params = copy(connection.info.dsn_parameters)
     params["password"] = connection.info.password
     params["dbname"] = dbname
@@ -221,15 +280,21 @@ def execute_local(
 
 
 def with_server_metadata(
-    connection: Any, row: Any, dbname: str = ""
+    connection: Any, row: Mapping[str, Any], dbname: str = ""
 ) -> Dict[str, str]:
     """
-    Retrieve metadata about the PostgreSQL cluster
+    Enrich a database row with server-metadata.
+
+    This will add the following columns to the data in *row*:
+
+    * tag:dbname
+    * tag:server_version_num
+    * tag:server_port
+    * tag:host
     """
     params = copy(connection.info.dsn_parameters)
     with connection.cursor() as cursor:
         cursor.execute("SHOW server_version")
-        server_version = cursor.fetchone()[0]
         cursor.execute("SHOW server_version_num")
         server_version_num = cursor.fetchone()[0]
         cursor.execute("SHOW port")
@@ -245,6 +310,11 @@ def with_server_metadata(
 
 
 def is_excluded(name: str, pattern: str) -> bool:
+    """
+    Determine whether the value in *name* matches the reges in *pattern*.
+
+    If True, also emit a log-message.
+    """
     if bool(re.fullmatch(pattern, name)):
         LOG.debug("%r was excluded by pattern %r", name, pattern)
         return True
@@ -252,6 +322,14 @@ def is_excluded(name: str, pattern: str) -> bool:
 
 
 def list_databases(connection: Any, exclude: List[str]) -> Iterable[str]:
+    """
+    Return a collection of all database names in the cluster connected to by
+    *connection*.
+
+    :param connection: A connection to the DB cluster
+    :param exclude: A list of regexes containing exclusion regexes which are
+        checked against the DB-names.
+    """
     query = (
         'SELECT datname as "database" '
         "FROM pg_database WHERE datistemplate=false;"

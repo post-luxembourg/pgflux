@@ -17,7 +17,10 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "queries",
         nargs="*",
-        help="The query to be run against the PostgreSQL cluster (can be specified multiple times)",
+        help=(
+            "The query to be run against the PostgreSQL cluster "
+            "(can be specified multiple times)"
+        ),
     )
     parser.add_argument(
         "--list-queries",
@@ -25,20 +28,46 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
         default=False,
         help="List all available PostgreSQL queries by name and exit.",
     )
-    parser.add_argument("--all", action="store_true", default=False)
-    parser.add_argument("--exclude", action="append")
-    parser.add_argument("-v", "--verbose", action="store_true", default=False)
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        default=False,
+        help="If this flag is set, run all the available queries.",
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        help=(
+            "RegEx of database names that should be excluded from the "
+            "statistics. Can be supplied multiple times"
+        ),
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Show more output on the console",
+    )
     return parser.parse_args(args)
 
 
 def list_queries(stream: TextIO) -> None:
+    """
+    List all available queries.
+
+    :param stream: The target stream where the result will be printed into.
+    """
     list_queries_internal(core.Scope.CLUSTER, stream)
     list_queries_internal(core.Scope.DB, stream)
 
 
 def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     """
-    Print all supported queries into the given stream
+    List all available queries with the given scope.
+
+    :param scope: Either database-local or cluster-global
+    :param stream: The target stream where the result will be printed into.
     """
     items = sorted(
         core.iter_query_files(scope),
@@ -65,7 +94,16 @@ def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     print("─" * len(header_str), file=stream)
 
 
-def execute_query(query: str, exclude: List[str], stream: TextIO) -> None:
+def execute_query(query: str, exclude: List[str]) -> None:
+    """
+    Run the given query against the DB clusters excluding any databases where
+    the name matches any regex in *exclude*.
+
+    :param query: The *name* of the query to execute
+    :param exclude: A list of regexes which are all used to verify if a database
+        should be excluded from the stats. If *any* one of them matches, the DB
+        is skipped.
+    """
     scope_str, _, query_name = query.partition(":")
     scope = core.Scope(scope_str)
     queries = core.load_queries()
@@ -79,7 +117,7 @@ def execute_query(query: str, exclude: List[str], stream: TextIO) -> None:
             for dbname in core.list_databases(connection, exclude):
                 result.extend(
                     core.execute_local(
-                        connection, queries.db, dbname, query_name
+                        connection, queries.db, query_name, dbname
                     )
                 )
         else:
@@ -127,10 +165,10 @@ def main() -> int:  # pragma: no cover
             for query in core.iter_query_files(core.Scope.DB)
         }
         for query in queries:
-            execute_query(query, args.exclude, sys.stdout)
+            execute_query(query, args.exclude)
         LOG.debug("Done")
     else:
         for query in args.queries:
-            execute_query(query, args.exclude, sys.stdout)
+            execute_query(query, args.exclude)
         LOG.debug("Done")
     return 0

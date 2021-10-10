@@ -26,11 +26,11 @@ Commands
 
 * Run a PostgreSQL instance for testing::
 
-  fab run-postgres-container
+    fab run-postgres-container
 
 * Run a InfluxDB instance for testing::
 
-  fab run-influx-container
+    fab run-influx-container
 
 * Run the tests::
 

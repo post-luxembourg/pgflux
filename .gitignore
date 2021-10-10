@@ -142,3 +142,5 @@ cython_debug/
 /.ept
 /doc/_static/changelog.json
 /doc/changelog.md
+/doc/_build
+/doc/api

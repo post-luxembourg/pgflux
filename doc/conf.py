@@ -5,7 +5,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
-    "recommonmark",
 ]
 
 templates_path = ["_templates"]
@@ -15,7 +14,7 @@ project = "pgflux"
 copyright = "2021, Michel Albert"
 author = "Michel Albert"
 version = pgflux.__version__
-release = pgflux.__exact_version__
+release = pgflux.__version__
 exclude_patterns = ["_build"]
 pygments_style = "sphinx"
 html_theme = "sphinx_rtd_theme"
