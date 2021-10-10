@@ -12,5 +12,6 @@
     "search.exclude": {
         "**/*.pyc": true
     },
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true
 }
