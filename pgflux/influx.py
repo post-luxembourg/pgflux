@@ -6,8 +6,6 @@ from contextlib import contextmanager
 from os import getenv
 from typing import Any, Dict, Generator, List, Mapping, Tuple, Union
 
-from dotenv import load_dotenv
-
 from pgflux.core import PgFluxException
 
 LOG = logging.getLogger(__name__)
@@ -86,7 +84,6 @@ def connect() -> Generator[
     The variables are also loaded from a ``.env`` file in the current working
     folder if it exists.
     """
-    load_dotenv(".env")
     host = getenv("PGFLUX_INFLUX_HOST", "")
     username = getenv("PGFLUX_INFLUX_USERNAME", "")
     password = getenv("PGFLUX_INFLUX_PASSWORD", "")

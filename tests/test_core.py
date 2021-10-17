@@ -5,8 +5,14 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
+from dotenv import load_dotenv
 
 import pgflux.core as core
+
+
+@pytest.fixture(autouse=True, scope="session")
+def load_dotenv_fixture():
+    load_dotenv(".env")
 
 
 @pytest.mark.parametrize(

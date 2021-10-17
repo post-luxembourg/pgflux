@@ -17,7 +17,6 @@ from typing import (
 )
 
 import psycopg2
-from dotenv import load_dotenv
 from psycopg2.errors import OperationalError
 from psycopg2.extensions import connection
 from psycopg2.extras import DictCursor
@@ -208,10 +207,9 @@ def connect() -> connection:
     The variable is also loaded from a ``.env`` file in the current working
     folder if it exists.
     """
-    load_dotenv(".env")
     dsn = getenv("PGFLUX_POSTGRES_DSN", "")
     if not dsn:
-        raise PgFluxException("PGFLUX_DSN does not seem to be set.")
+        raise PgFluxException("PGFLUX_POSTGRES_DSN does not seem to be set.")
     with psycopg2.connect(dsn) as connection:  # type: ignore
         yield connection
 

@@ -3,6 +3,8 @@ import logging
 import sys
 from typing import Dict, List, Optional, TextIO
 
+from dotenv.main import load_dotenv
+
 from pgflux import core
 from pgflux.influx import connect, row_to_influx, send_to_influx
 
@@ -149,7 +151,9 @@ def main() -> int:  # pragma: no cover
     """
     Main CLI entry-point of the script
     """
+    load_dotenv(".env")
     args = parse_args()
+
     if args.list_queries:
         list_queries(sys.stdout)
         return 0
