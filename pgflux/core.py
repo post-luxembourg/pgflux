@@ -6,20 +6,11 @@ from dataclasses import dataclass
 from enum import Enum
 from os import getenv
 from pathlib import Path
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Mapping,
-    MutableMapping,
-    NamedTuple,
-)
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Mapping, NamedTuple
 
 import psycopg2
 from psycopg2.errors import OperationalError
-from psycopg2.extensions import connection
+from psycopg2.extensions import connection as Connection
 from psycopg2.extras import DictCursor
 
 from pgflux.exc import PgFluxException
@@ -200,7 +191,7 @@ def get_query(
 
 
 @contextmanager  # type: ignore
-def connect() -> connection:
+def connect() -> Connection:
     """
     Create a new database connection using the ``PGFLUX_POSTGRES_DSN``
     environment variable.
@@ -269,13 +260,14 @@ def execute_local(
                 query = get_query(queries, query_name, version)
                 if not query:
                     raise PgFluxException(
-                        f"Unable to load query {query_name!r} in version {version}"
+                        f"Unable to load query {query_name!r} "
+                        f"in version {version}"
                     )
                 cursor.execute(query)  # type: ignore
                 for row in cursor:  # type: ignore
                     yield with_server_metadata(local_connection, row, dbname)
     except OperationalError:  # type: ignore
-        LOG.error(f"Unable to connect to {dbname}", exc_info=True)
+        LOG.error("Unable to connect to %s", dbname, exc_info=True)
 
 
 def with_server_metadata(
