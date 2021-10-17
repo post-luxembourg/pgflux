@@ -1,13 +1,11 @@
 import argparse
 import logging
 import sys
-from typing import Dict, List, Optional, TextIO
+from typing import List, Optional, TextIO
 
 from dotenv.main import load_dotenv
 
 from pgflux import core
-from pgflux.exc import PgFluxException
-from pgflux.influx import row_to_influx
 from pgflux.output.interface import Output
 
 LOG = logging.getLogger(__name__)
@@ -129,44 +127,6 @@ def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     print("─" * len(header_str), file=stream)
 
 
-def execute_query(query: str, exclude: List[str], output: Output) -> None:
-    """
-    Run the given query against the DB clusters excluding any databases where
-    the name matches any regex in *exclude*.
-
-    :param query: The *name* of the query to execute
-    :param exclude: A list of regexes which are all used to verify if a database
-        should be excluded from the stats. If *any* one of them matches, the DB
-        is skipped.
-    """
-    scope_str, _, query_name = query.partition(":")
-    scope = core.Scope(scope_str)
-    queries = core.load_queries()
-    result: List[Dict[str, str]] = []
-    with core.connect() as connection:
-        if scope == core.Scope.CLUSTER:
-            result.extend(
-                core.execute_global(connection, queries.cluster, query_name)
-            )
-        elif scope == core.Scope.DB:
-            for dbname in core.list_databases(connection, exclude):
-                result.extend(
-                    core.execute_local(
-                        connection, queries.db, query_name, dbname
-                    )
-                )
-        else:
-            raise PgFluxException(f"Unknown scope: {scope}")
-
-    for row in result:
-        try:
-            tmp = row_to_influx(query_name, row, prefix="postgres_")
-            output.send(tmp)
-        except PgFluxException as exc:
-            LOG.error("ERROR in %s: %s", query_name, exc)
-    output.flush()
-
-
 def setup_logging(is_verbose: bool = False) -> None:
     """
     Enables logging if *is_verbose* is true. Otherwise this is a no-op.
@@ -207,10 +167,10 @@ def main() -> int:  # pragma: no cover
             for query in core.iter_query_files(core.Scope.DB)
         }
         for query in queries:
-            execute_query(query, args.exclude, output)
+            core.execute_query(query, args.exclude, output)
         LOG.debug("Done")
     else:
         for query in args.queries:
-            execute_query(query, args.exclude, output)
+            core.execute_query(query, args.exclude, output)
         LOG.debug("Done")
     return 0

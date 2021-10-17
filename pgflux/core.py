@@ -7,6 +7,7 @@ from enum import Enum
 from os import getenv
 from pathlib import Path
 from typing import (
+    TYPE_CHECKING,
     Any,
     Dict,
     Iterable,
@@ -22,8 +23,12 @@ from psycopg2.extensions import connection
 from psycopg2.extras import DictCursor
 
 from pgflux.exc import PgFluxException
+from pgflux.influx import row_to_influx
 
 LOG = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from pgflux.output import Output
 
 
 class PgVersion(NamedTuple):
@@ -335,3 +340,39 @@ def list_databases(connection: Any, exclude: List[str]) -> Iterable[str]:
             if any(exclusion_matches):
                 continue
             yield row
+
+
+def execute_query(query: str, exclude: List[str], output: "Output") -> None:
+    """
+    Run the given query against the DB clusters excluding any databases where
+    the name matches any regex in *exclude*.
+
+    :param query: The *name* of the query to execute
+    :param exclude: A list of regexes which are all used to verify if a database
+        should be excluded from the stats. If *any* one of them matches, the DB
+        is skipped.
+    """
+    scope_str, _, query_name = query.partition(":")
+    scope = Scope(scope_str)
+    queries = load_queries()
+    result: List[Dict[str, str]] = []
+    with connect() as connection:
+        if scope == Scope.CLUSTER:
+            result.extend(
+                execute_global(connection, queries.cluster, query_name)
+            )
+        elif scope == Scope.DB:
+            for dbname in list_databases(connection, exclude):
+                result.extend(
+                    execute_local(connection, queries.db, query_name, dbname)
+                )
+        else:
+            raise PgFluxException(f"Unknown scope: {scope}")
+
+    for row in result:
+        try:
+            tmp = row_to_influx(query_name, row, prefix="postgres_")
+            output.send(tmp)
+        except PgFluxException as exc:
+            LOG.error("ERROR in %s: %s", query_name, exc)
+    output.flush()
