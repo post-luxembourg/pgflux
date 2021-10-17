@@ -127,7 +127,7 @@ def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     print("─" * len(header_str), file=stream)
 
 
-def setup_logging(is_verbose: bool = False) -> None:
+def setup_logging(is_verbose: bool = False) -> None:  # pragma: no cover
     """
     Enables logging if *is_verbose* is true. Otherwise this is a no-op.
     """

@@ -75,7 +75,7 @@ class HTTPOutput(Output):
         dbname = getenv("PGFLUX_INFLUX_DBNAME", "")
 
         headers = {
-            "Content-type": "text/plain",
+            "Content-Type": "text/plain",
         }
 
         if username and password:
