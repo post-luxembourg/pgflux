@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from os import getenv
 from typing import Any, Dict, Generator, List, Mapping, Tuple, Union
 
-from pgflux.core import PgFluxException
+from pgflux.exc import PgFluxException
 
 LOG = logging.getLogger(__name__)
 

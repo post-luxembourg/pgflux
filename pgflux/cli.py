@@ -6,6 +6,7 @@ from typing import Dict, List, Optional, TextIO
 from dotenv.main import load_dotenv
 
 from pgflux import core
+from pgflux.exc import PgFluxException
 from pgflux.influx import connect, row_to_influx, send_to_influx
 
 LOG = logging.getLogger(__name__)
@@ -124,14 +125,14 @@ def execute_query(query: str, exclude: List[str]) -> None:
                     )
                 )
         else:
-            raise core.PgFluxException(f"Unknown scope: {scope}")
+            raise PgFluxException(f"Unknown scope: {scope}")
 
     payload: List[str] = []
     for row in result:
         try:
             output = row_to_influx(query_name, row, prefix="postgres_")
             payload.append(output)
-        except core.PgFluxException as exc:
+        except PgFluxException as exc:
             LOG.error("ERROR in %s: %s", query_name, exc)
     with connect() as influx_meta:
         connection, headers, params = influx_meta

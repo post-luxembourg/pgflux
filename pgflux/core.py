@@ -21,6 +21,8 @@ from psycopg2.errors import OperationalError
 from psycopg2.extensions import connection
 from psycopg2.extras import DictCursor
 
+from pgflux.exc import PgFluxException
+
 LOG = logging.getLogger(__name__)
 
 
@@ -82,12 +84,6 @@ class QueryCollection:
 
     #: Queries to be run against a single DB
     db: Dict[str, Dict[PgVersion, str]]
-
-
-class PgFluxException(Exception):
-    """
-    Base exception for pgflux
-    """
 
 
 def get_pg_version(cursor: Any) -> PgVersion:
