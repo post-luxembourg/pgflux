@@ -1,10 +1,5 @@
-import http.client
 import logging
-import urllib.parse
-from base64 import b64encode
-from contextlib import contextmanager
-from os import getenv
-from typing import Any, Dict, Generator, List, Mapping, Tuple, Union
+from typing import Any, List, Mapping, Union
 
 from pgflux.exc import PgFluxException
 
@@ -71,76 +66,3 @@ def row_to_influx(
     field_component = ",".join(fields)
 
     return f"{prefix}{measurement}{tag_component} {field_component} {timestamp}"
-
-
-@contextmanager
-def connect() -> Generator[
-    Tuple[http.client.HTTPConnection, Dict[str, str], Dict[str, str]],
-    None,
-    None,
-]:
-    """
-    Create a new InfluxDB connection using the ``PGFLUX_INFLUX_*`` environment
-    variables.
-
-    The variables are also loaded from a ``.env`` file in the current working
-    folder if it exists.
-    """
-    host = getenv("PGFLUX_INFLUX_HOST", "")
-    username = getenv("PGFLUX_INFLUX_USERNAME", "")
-    password = getenv("PGFLUX_INFLUX_PASSWORD", "")
-    dbname = getenv("PGFLUX_INFLUX_DBNAME", "")
-    use_ssl_text = getenv("PGFLUX_INFLUX_USE_SSL", "").lower().strip()
-    use_ssl = (
-        True if use_ssl_text and use_ssl_text[0] in {"y", "1", "t"} else False
-    )
-    connection_class = (
-        http.client.HTTPSConnection if use_ssl else http.client.HTTPConnection
-    )
-
-    headers = {
-        "Content-type": "text/plain",
-    }
-
-    if username and password:
-        token = b64encode(f"{username}:{password}".encode("ascii")).decode(
-            "ascii"
-        )
-        headers["Authorization"] = f"BASIC {token}"
-
-    if not all([host, dbname]):
-        raise PgFluxException("PGFLUX_INFLUX* do not seem to be set.")
-
-    params = {"db": dbname, "precision": "s"}
-    conn = connection_class(host)
-    try:
-        yield conn, headers, params
-    finally:
-        conn.close()
-
-
-def send_to_influx(
-    connection: http.client.HTTPConnection,
-    headers: Dict[str, str],
-    params: Dict[str, str],
-    payload: str,
-) -> http.client.HTTPResponse:
-    """
-    Send the data in *payload* to InfluxDB using *connection*.
-
-    This sends a simple HTTP POST request to the other end of *connection*.
-
-    :param connection: The HTTP connection to the InfluxDB endpoint
-    :param headers: An optional mapping for HTTP headers
-    :param param: An optional mapping for HTTP query arguments
-    :param payload: The data to send
-    :return: A HTTP response
-    """
-    params_encoded = urllib.parse.urlencode(params)
-    connection.request("POST", f"/write?{params_encoded}", payload, headers)
-    response = connection.getresponse()
-    if response.status >= 400:
-        raise PgFluxException(
-            f"Unable to send data to InfluxDB ({response.read()})"
-        )
-    return response

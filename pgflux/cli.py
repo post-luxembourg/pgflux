@@ -7,7 +7,8 @@ from dotenv.main import load_dotenv
 
 from pgflux import core
 from pgflux.exc import PgFluxException
-from pgflux.influx import connect, row_to_influx, send_to_influx
+from pgflux.influx import row_to_influx
+from pgflux.output.interface import Output
 
 LOG = logging.getLogger(__name__)
 
@@ -53,7 +54,37 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
         default=False,
         help="Show more output on the console",
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="stdout",
+        help="Define where the data should be sent to.",
+    )
+    parser.add_argument(
+        "--list-outputs",
+        action="store_true",
+        default=False,
+        help="List all possible outputs",
+    )
     return parser.parse_args(args)
+
+
+def list_outputs(stream: TextIO) -> None:
+    """
+    List all available output targets.
+
+    :param stream: The target stream where the result will be printed into.
+    """
+    for name, cls in Output.REGISTRY.items():
+        print(
+            f"{name}: {getattr(cls, 'CLI_HELP', cls.__name__)}",
+            file=stream,
+        )
+        env_vars = getattr(cls, "ENV_VARS", {})  # type: ignore
+        if env_vars:
+            print("  Environment variables for configuration:")
+        for key, value in env_vars.items():
+            print(f"    | {key:<30s}: {value}", file=stream)
 
 
 def list_queries(stream: TextIO) -> None:
@@ -98,7 +129,7 @@ def list_queries_internal(scope: core.Scope, stream: TextIO) -> None:
     print("─" * len(header_str), file=stream)
 
 
-def execute_query(query: str, exclude: List[str]) -> None:
+def execute_query(query: str, exclude: List[str], output: Output) -> None:
     """
     Run the given query against the DB clusters excluding any databases where
     the name matches any regex in *exclude*.
@@ -127,16 +158,13 @@ def execute_query(query: str, exclude: List[str]) -> None:
         else:
             raise PgFluxException(f"Unknown scope: {scope}")
 
-    payload: List[str] = []
     for row in result:
         try:
-            output = row_to_influx(query_name, row, prefix="postgres_")
-            payload.append(output)
+            tmp = row_to_influx(query_name, row, prefix="postgres_")
+            output.send(tmp)
         except PgFluxException as exc:
             LOG.error("ERROR in %s: %s", query_name, exc)
-    with connect() as influx_meta:
-        connection, headers, params = influx_meta
-        send_to_influx(connection, headers, params, "\n".join(payload))
+    output.flush()
 
 
 def setup_logging(is_verbose: bool = False) -> None:
@@ -159,8 +187,16 @@ def main() -> int:  # pragma: no cover
     if args.list_queries:
         list_queries(sys.stdout)
         return 0
+
+    if args.list_outputs:
+        list_outputs(sys.stdout)
+        return 0
+
     setup_logging(args.verbose)
     LOG.debug("Startup")
+
+    output = Output.create(args.output)
+
     if args.all:
         queries = {
             f"{core.Scope.CLUSTER.value}:{query.query_name}"
@@ -171,10 +207,10 @@ def main() -> int:  # pragma: no cover
             for query in core.iter_query_files(core.Scope.DB)
         }
         for query in queries:
-            execute_query(query, args.exclude)
+            execute_query(query, args.exclude, output)
         LOG.debug("Done")
     else:
         for query in args.queries:
-            execute_query(query, args.exclude)
+            execute_query(query, args.exclude, output)
         LOG.debug("Done")
     return 0
