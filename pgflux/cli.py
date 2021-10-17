@@ -39,6 +39,7 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--exclude",
         action="append",
+        default=[],
         help=(
             "RegEx of database names that should be excluded from the "
             "statistics. Can be supplied multiple times"
