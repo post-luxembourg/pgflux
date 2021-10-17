@@ -75,7 +75,7 @@ def row_to_influx(
 
 @contextmanager
 def connect() -> Generator[
-    Tuple[http.client.HTTPSConnection, Dict[str, str], Dict[str, str]],
+    Tuple[http.client.HTTPConnection, Dict[str, str], Dict[str, str]],
     None,
     None,
 ]:
@@ -90,15 +90,29 @@ def connect() -> Generator[
     username = getenv("PGFLUX_INFLUX_USERNAME", "")
     password = getenv("PGFLUX_INFLUX_PASSWORD", "")
     dbname = getenv("PGFLUX_INFLUX_DBNAME", "")
-    if not all([host, username, password, dbname]):
-        raise PgFluxException("PGFLUX_INFLUX* do not seem to be set.")
-    token = b64encode(f"{username}:{password}".encode("ascii")).decode("ascii")
-    params = {"db": dbname, "precision": "s"}
+    use_ssl_text = getenv("PGFLUX_INFLUX_USE_SSL", "").lower().strip()
+    use_ssl = (
+        True if use_ssl_text and use_ssl_text[0] in {"y", "1", "t"} else False
+    )
+    connection_class = (
+        http.client.HTTPSConnection if use_ssl else http.client.HTTPConnection
+    )
+
     headers = {
         "Content-type": "text/plain",
-        "Authorization": f"BASIC {token}",
     }
-    conn = http.client.HTTPSConnection(host)
+
+    if username and password:
+        token = b64encode(f"{username}:{password}".encode("ascii")).decode(
+            "ascii"
+        )
+        headers["Authorization"] = f"BASIC {token}"
+
+    if not all([host, dbname]):
+        raise PgFluxException("PGFLUX_INFLUX* do not seem to be set.")
+
+    params = {"db": dbname, "precision": "s"}
+    conn = connection_class(host)
     try:
         yield conn, headers, params
     finally:
@@ -106,7 +120,7 @@ def connect() -> Generator[
 
 
 def send_to_influx(
-    connection: http.client.HTTPSConnection,
+    connection: http.client.HTTPConnection,
     headers: Dict[str, str],
     params: Dict[str, str],
     payload: str,
