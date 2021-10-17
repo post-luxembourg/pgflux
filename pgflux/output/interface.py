@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Type
 
+from pgflux.enums import Precision
 from pgflux.exc import PgFluxException
 
 
 class Output(ABC):
 
     REGISTRY: Dict[str, Type["Output"]] = {}
+    PRECISION: Precision = Precision.NANO_SECONDS
 
     @abstractmethod
     def send(self, row: str) -> None:

@@ -1,6 +1,7 @@
 import logging
 from typing import Any, List, Mapping, Union
 
+from pgflux.enums import Precision
 from pgflux.exc import PgFluxException
 
 LOG = logging.getLogger(__name__)
@@ -21,7 +22,10 @@ def with_type(value: Union[int, str, float, bool]) -> str:
 
 
 def row_to_influx(
-    measurement: str, row: Mapping[str, Any], prefix: str = ""
+    measurement: str,
+    row: Mapping[str, Any],
+    prefix: str = "",
+    precision: Precision = Precision.NANO_SECONDS,
 ) -> str:
     """
     Convert db-results from PostgreSQL into a line for InfluxDB line-protocol
@@ -45,9 +49,7 @@ def row_to_influx(
     timestamp: int = 0
     for key, value in row.items():
         if key == "timestamp":
-            timestamp = int(
-                value
-            )  # TODO verify if this was not fixed in an earlier change (between 2021-10-10 and 2021-10-17)
+            timestamp = int(value) * 10 ** precision.value
             continue
         if key.startswith("tag:"):
             tags.append(f"{key[4:]}={value}")

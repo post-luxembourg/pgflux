@@ -371,7 +371,9 @@ def execute_query(query: str, exclude: List[str], output: "Output") -> None:
 
     for row in result:
         try:
-            tmp = row_to_influx(query_name, row, prefix="postgres_")
+            tmp = row_to_influx(
+                query_name, row, prefix="postgres_", precision=output.PRECISION
+            )
             output.send(tmp)
         except PgFluxException as exc:
             LOG.error("ERROR in %s: %s", query_name, exc)

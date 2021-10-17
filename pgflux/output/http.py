@@ -6,6 +6,7 @@ from os import getenv
 from typing import Dict, Generator, List, Tuple
 
 from pgflux.core import PgFluxException
+from pgflux.enums import Precision
 from pgflux.output.interface import Output
 
 
@@ -47,6 +48,7 @@ class HTTPOutput(Output):
         "PGFLUX_INFLUX_USERNAME": "The username",
         "PGFLUX_INFLUX_PASSWORD": "The password",
     }
+    PRECISION = Precision.SECONDS
 
     def __init__(self) -> None:
         super().__init__()
