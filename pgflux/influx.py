@@ -139,4 +139,8 @@ def send_to_influx(
     params_encoded = urllib.parse.urlencode(params)
     connection.request("POST", f"/write?{params_encoded}", payload, headers)
     response = connection.getresponse()
+    if response.status >= 400:
+        raise PgFluxException(
+            f"Unable to send data to InfluxDB ({response.read()})"
+        )
     return response
