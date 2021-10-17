@@ -1,0 +1,19 @@
+---
+version: "3.3"
+services:
+  db:
+    image: library/postgres:latest
+    environment:
+      POSTGRES_PASSWORD: mys3cr37passw0rd
+    ports:
+      - "5432:5432"
+  influx:
+    image: "influxdb:1.8"
+    ports:
+      - "8086:8086"
+    volumes:
+      - "./docker-resources/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
