@@ -32,10 +32,14 @@ def run_dev_containers(context, reset=True):
         if reset:
             context.run("docker-compose down", pty=True, replace_env=False)
 
+@task
+def test(context):
+    context.run("./env/bin/pytest", pty=True, replace_env=False)
+
 
 @task
 def doc(context):
     context.run("./env/bin/sphinx-apidoc -o doc/api -f pgflux")
     context.run(
-        "./env/bin/sphinx-build -a doc/ gh-pages", pty=True, replace_env=False
+        "./env/bin/sphinx-build -a doc/ docs", pty=True, replace_env=False
     )

@@ -1,9 +1,10 @@
 pgflux
 ======
 
-A simple Python utility to send PostgreSQL metrics to InfluxDB
+``pgflux`` is a Python utility to send PostgreSQL metrics to InfluxDB. The
+drivers when developing this tool were:
 
-It enables Grafana Visualisations as seen in the screenshots below:
+It enables Grafana visualisations as seen in the screenshots below:
 
 .. image:: /doc/images/grafana-dashboard-01.png
   :target: /doc/images/grafana-dashboard-01.png
@@ -15,8 +16,28 @@ It enables Grafana Visualisations as seen in the screenshots below:
   :target: /doc/images/grafana-dashboard-03.png
 
 
-Development
-===========
+Installation
+============
+
+The project is currently very much usable but not *officially* released yet (no
+PyPI packages).
+
+It is however installable via ``git`` or ``http`` directly::
+
+    pip install "git+https://github.com/exhuma/pgflux@initial-release"
+
+
+Usage
+=====
+
+See https://exhuma.github.io/pgflux/usage.html
+
+
+Development & Extending
+=======================
+
+For detailed instructions, see https://exhuma.github.io/pgflux/development.html
+
 
 NOTE
 ----
@@ -28,21 +49,18 @@ have ``pipx``: ``pip install --user fabric``.
 Commands
 --------
 
+* Listing all available development tasks::
+
+    fab -l
+
 * To set up or refresh the development environment::
 
     fab develop
 
-* Environment Variables can be set via a ``.env`` file (see ``.env.template``
-  as example).
+* Run PostgreSQL, InfluxDB & Grafana containers (requires ``docker-compose``)::
 
-* Run a PostgreSQL instance for testing::
-
-    fab run-postgres-container
-
-* Run a InfluxDB instance for testing::
-
-    fab run-influx-container
+    fab run-dev-containers
 
 * Run the tests::
 
-    ./env/bin/pytest
+    fab test

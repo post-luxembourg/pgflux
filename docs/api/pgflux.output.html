@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pgflux.output package &mdash; pgflux 1.0.0a2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="pgflux package" href="pgflux.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pgflux
+          </a>
+              <div class="version">
+                1.0.0a2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development &amp; Extending</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pgflux.html">pgflux package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pgflux.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pgflux.output package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pgflux.output.http">pgflux.output.http module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pgflux.output.interface">pgflux.output.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pgflux.output.stream">pgflux.output.stream module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pgflux.output">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux.cli">pgflux.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux.core">pgflux.core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux.enums">pgflux.enums module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux.exc">pgflux.exc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux.influx">pgflux.influx module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pgflux.html#module-pgflux">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pgflux</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="pgflux.html">pgflux package</a> &raquo;</li>
+      <li>pgflux.output package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pgflux.output.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pgflux-output-package">
+<h1>pgflux.output package<a class="headerlink" href="#pgflux-output-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-pgflux.output.http">
+<span id="pgflux-output-http-module"></span><h2>pgflux.output.http module<a class="headerlink" href="#module-pgflux.output.http" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.http.</span></span><span class="sig-name descname"><span class="pre">HTTPOutput</span></span><a class="headerlink" href="#pgflux.output.http.HTTPOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.interface.Output</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.CLI_HELP">
+<span class="sig-name descname"><span class="pre">CLI_HELP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Sends</span> <span class="pre">a</span> <span class="pre">bulk</span> <span class="pre">HTTP</span> <span class="pre">POST</span> <span class="pre">request</span> <span class="pre">to</span> <span class="pre">InfluxDB'</span></em><a class="headerlink" href="#pgflux.output.http.HTTPOutput.CLI_HELP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.CONNECTION_CLASS">
+<span class="sig-name descname"><span class="pre">CONNECTION_CLASS</span></span><a class="headerlink" href="#pgflux.output.http.HTTPOutput.CONNECTION_CLASS" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPConnection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">http.client.HTTPConnection</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.ENV_VARS">
+<span class="sig-name descname"><span class="pre">ENV_VARS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'PGFLUX_INFLUX_DBNAME':</span> <span class="pre">'The</span> <span class="pre">database</span> <span class="pre">name',</span> <span class="pre">'PGFLUX_INFLUX_HOST':</span> <span class="pre">'Hostname</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">InfluxDB',</span> <span class="pre">'PGFLUX_INFLUX_PASSWORD':</span> <span class="pre">'The</span> <span class="pre">password',</span> <span class="pre">'PGFLUX_INFLUX_USERNAME':</span> <span class="pre">'The</span> <span class="pre">username'}</span></em><a class="headerlink" href="#pgflux.output.http.HTTPOutput.ENV_VARS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'http'</span></em><a class="headerlink" href="#pgflux.output.http.HTTPOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.PRECISION">
+<span class="sig-name descname"><span class="pre">PRECISION</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="pgflux.html#pgflux.enums.Precision" title="pgflux.enums.Precision"><span class="pre">pgflux.enums.Precision</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#pgflux.output.http.HTTPOutput.PRECISION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPConnection" title="(in Python v3.10)"><span class="pre">http.client.HTTPConnection</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pgflux.output.http.HTTPOutput.connect" title="Permalink to this definition"></a></dt>
+<dd><p>Create a new InfluxDB connection using the <code class="docutils literal notranslate"><span class="pre">PGFLUX_INFLUX_*</span></code> environment
+variables.</p>
+<p>The variables are also loaded from a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the current working
+folder if it exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.http.HTTPOutput.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPOutput.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.http.HTTPOutput.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPSOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.http.</span></span><span class="sig-name descname"><span class="pre">HTTPSOutput</span></span><a class="headerlink" href="#pgflux.output.http.HTTPSOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.http.HTTPOutput" title="pgflux.output.http.HTTPOutput"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.http.HTTPOutput</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPSOutput.CONNECTION_CLASS">
+<span class="sig-name descname"><span class="pre">CONNECTION_CLASS</span></span><a class="headerlink" href="#pgflux.output.http.HTTPSOutput.CONNECTION_CLASS" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">http.client.HTTPSConnection</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPSOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'https'</span></em><a class="headerlink" href="#pgflux.output.http.HTTPSOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.http.HTTPSOutput.lines">
+<span class="sig-name descname"><span class="pre">lines</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pgflux.output.http.HTTPSOutput.lines" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pgflux.output.http.send_to_influx">
+<span class="sig-prename descclassname"><span class="pre">pgflux.output.http.</span></span><span class="sig-name descname"><span class="pre">send_to_influx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPConnection" title="(in Python v3.10)"><span class="pre">http.client.HTTPConnection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse" title="(in Python v3.10)"><span class="pre">http.client.HTTPResponse</span></a></span></span><a class="headerlink" href="#pgflux.output.http.send_to_influx" title="Permalink to this definition"></a></dt>
+<dd><p>Send the data in <em>payload</em> to InfluxDB using <em>connection</em>.</p>
+<p>This sends a simple HTTP POST request to the other end of <em>connection</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> – The HTTP connection to the InfluxDB endpoint</p></li>
+<li><p><strong>headers</strong> – An optional mapping for HTTP headers</p></li>
+<li><p><strong>param</strong> – An optional mapping for HTTP query arguments</p></li>
+<li><p><strong>payload</strong> – The data to send</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A HTTP response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pgflux.output.interface">
+<span id="pgflux-output-interface-module"></span><h2>pgflux.output.interface module<a class="headerlink" href="#module-pgflux.output.interface" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.interface.</span></span><span class="sig-name descname"><span class="pre">Output</span></span><a class="headerlink" href="#pgflux.output.interface.Output" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output.PRECISION">
+<span class="sig-name descname"><span class="pre">PRECISION</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="pgflux.html#pgflux.enums.Precision" title="pgflux.enums.Precision"><span class="pre">pgflux.enums.Precision</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#pgflux.output.interface.Output.PRECISION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output.REGISTRY">
+<span class="sig-name descname"><span class="pre">REGISTRY</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><span class="pre">pgflux.output.interface.Output</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'http':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.http.HTTPOutput'&gt;,</span> <span class="pre">'https':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.http.HTTPSOutput'&gt;,</span> <span class="pre">'stdout':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.stream.StreamOutput'&gt;}</span></em><a class="headerlink" href="#pgflux.output.interface.Output.REGISTRY" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output.create">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><span class="pre">pgflux.output.interface.Output</span></a></span></span><a class="headerlink" href="#pgflux.output.interface.Output.create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output.flush">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.interface.Output.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.interface.Output.send">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.interface.Output.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pgflux.output.stream">
+<span id="pgflux-output-stream-module"></span><h2>pgflux.output.stream module<a class="headerlink" href="#module-pgflux.output.stream" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.stream.</span></span><span class="sig-name descname"><span class="pre">StreamOutput</span></span><a class="headerlink" href="#pgflux.output.stream.StreamOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.interface.Output</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput.CLI_HELP">
+<span class="sig-name descname"><span class="pre">CLI_HELP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Writes</span> <span class="pre">all</span> <span class="pre">measurements</span> <span class="pre">onto</span> <span class="pre">stdout'</span></em><a class="headerlink" href="#pgflux.output.stream.StreamOutput.CLI_HELP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'stdout'</span></em><a class="headerlink" href="#pgflux.output.stream.StreamOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput.STREAM">
+<span class="sig-name descname"><span class="pre">STREAM</span></span><em class="property"><span class="pre">:</span> <span class="pre">TextIO</span></em><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></em><a class="headerlink" href="#pgflux.output.stream.StreamOutput.STREAM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.stream.StreamOutput.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.stream.StreamOutput.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.stream.StreamOutput.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pgflux.output">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pgflux.output" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.</span></span><span class="sig-name descname"><span class="pre">HTTPOutput</span></span><a class="headerlink" href="#pgflux.output.HTTPOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.interface.Output</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.CLI_HELP">
+<span class="sig-name descname"><span class="pre">CLI_HELP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Sends</span> <span class="pre">a</span> <span class="pre">bulk</span> <span class="pre">HTTP</span> <span class="pre">POST</span> <span class="pre">request</span> <span class="pre">to</span> <span class="pre">InfluxDB'</span></em><a class="headerlink" href="#pgflux.output.HTTPOutput.CLI_HELP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.CONNECTION_CLASS">
+<span class="sig-name descname"><span class="pre">CONNECTION_CLASS</span></span><a class="headerlink" href="#pgflux.output.HTTPOutput.CONNECTION_CLASS" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPConnection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">http.client.HTTPConnection</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.ENV_VARS">
+<span class="sig-name descname"><span class="pre">ENV_VARS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'PGFLUX_INFLUX_DBNAME':</span> <span class="pre">'The</span> <span class="pre">database</span> <span class="pre">name',</span> <span class="pre">'PGFLUX_INFLUX_HOST':</span> <span class="pre">'Hostname</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">InfluxDB',</span> <span class="pre">'PGFLUX_INFLUX_PASSWORD':</span> <span class="pre">'The</span> <span class="pre">password',</span> <span class="pre">'PGFLUX_INFLUX_USERNAME':</span> <span class="pre">'The</span> <span class="pre">username'}</span></em><a class="headerlink" href="#pgflux.output.HTTPOutput.ENV_VARS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'http'</span></em><a class="headerlink" href="#pgflux.output.HTTPOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.PRECISION">
+<span class="sig-name descname"><span class="pre">PRECISION</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="pgflux.html#pgflux.enums.Precision" title="pgflux.enums.Precision"><span class="pre">pgflux.enums.Precision</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#pgflux.output.HTTPOutput.PRECISION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPConnection" title="(in Python v3.10)"><span class="pre">http.client.HTTPConnection</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pgflux.output.HTTPOutput.connect" title="Permalink to this definition"></a></dt>
+<dd><p>Create a new InfluxDB connection using the <code class="docutils literal notranslate"><span class="pre">PGFLUX_INFLUX_*</span></code> environment
+variables.</p>
+<p>The variables are also loaded from a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the current working
+folder if it exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.HTTPOutput.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.lines">
+<span class="sig-name descname"><span class="pre">lines</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pgflux.output.HTTPOutput.lines" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.HTTPOutput.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.HTTPOutput.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.HTTPSOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.</span></span><span class="sig-name descname"><span class="pre">HTTPSOutput</span></span><a class="headerlink" href="#pgflux.output.HTTPSOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.http.HTTPOutput" title="pgflux.output.http.HTTPOutput"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.http.HTTPOutput</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPSOutput.CONNECTION_CLASS">
+<span class="sig-name descname"><span class="pre">CONNECTION_CLASS</span></span><a class="headerlink" href="#pgflux.output.HTTPSOutput.CONNECTION_CLASS" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">http.client.HTTPSConnection</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPSOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'https'</span></em><a class="headerlink" href="#pgflux.output.HTTPSOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.HTTPSOutput.lines">
+<span class="sig-name descname"><span class="pre">lines</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pgflux.output.HTTPSOutput.lines" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.Output">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.</span></span><span class="sig-name descname"><span class="pre">Output</span></span><a class="headerlink" href="#pgflux.output.Output" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.Output.PRECISION">
+<span class="sig-name descname"><span class="pre">PRECISION</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="pgflux.html#pgflux.enums.Precision" title="pgflux.enums.Precision"><span class="pre">pgflux.enums.Precision</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#pgflux.output.Output.PRECISION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.Output.REGISTRY">
+<span class="sig-name descname"><span class="pre">REGISTRY</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><span class="pre">pgflux.output.interface.Output</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'http':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.http.HTTPOutput'&gt;,</span> <span class="pre">'https':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.http.HTTPSOutput'&gt;,</span> <span class="pre">'stdout':</span> <span class="pre">&lt;class</span> <span class="pre">'pgflux.output.stream.StreamOutput'&gt;}</span></em><a class="headerlink" href="#pgflux.output.Output.REGISTRY" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.Output.create">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><span class="pre">pgflux.output.interface.Output</span></a></span></span><a class="headerlink" href="#pgflux.output.Output.create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.Output.flush">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.Output.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.Output.send">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.Output.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pgflux.output.</span></span><span class="sig-name descname"><span class="pre">StreamOutput</span></span><a class="headerlink" href="#pgflux.output.StreamOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pgflux.output.interface.Output" title="pgflux.output.interface.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">pgflux.output.interface.Output</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput.CLI_HELP">
+<span class="sig-name descname"><span class="pre">CLI_HELP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Writes</span> <span class="pre">all</span> <span class="pre">measurements</span> <span class="pre">onto</span> <span class="pre">stdout'</span></em><a class="headerlink" href="#pgflux.output.StreamOutput.CLI_HELP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'stdout'</span></em><a class="headerlink" href="#pgflux.output.StreamOutput.NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput.STREAM">
+<span class="sig-name descname"><span class="pre">STREAM</span></span><em class="property"><span class="pre">:</span> <span class="pre">TextIO</span></em><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></em><a class="headerlink" href="#pgflux.output.StreamOutput.STREAM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.StreamOutput.flush" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgflux.output.StreamOutput.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pgflux.output.StreamOutput.send" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pgflux.html" class="btn btn-neutral float-left" title="pgflux package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Michel Albert.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

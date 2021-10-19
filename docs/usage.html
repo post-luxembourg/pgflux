@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; pgflux 1.0.0a2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development &amp; Extending" href="development.html" />
+    <link rel="prev" title="pgflux" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pgflux
+          </a>
+              <div class="version">
+                1.0.0a2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#queries">Queries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development &amp; Extending</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">pgflux package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pgflux</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h1>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline"></a></h2>
+<p>All remote-connection details are configured via environment-variables. The
+only “core” environment variable is <code class="docutils literal notranslate"><span class="pre">PGFLUX_POSTGRES_DSN</span></code>. This is used to
+open a connection to the PostgreSQL cluster to fetch the statistics. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PGFLUX_POSTGRES_DSN</span><span class="o">=</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">postgres</span><span class="p">:</span><span class="n">mys3cr37</span><span class="nd">@localhost</span><span class="o">/</span><span class="n">postgres</span>
+</pre></div>
+</div>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline"></a></h2>
+<p>With only the <code class="docutils literal notranslate"><span class="pre">PGFLUX_POSTGRES_DSN</span></code> value set you can run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>This runs all available queries against the given database cluster and writes
+the result to <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.</p>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pgflux</span></code> supports different outputs. By default it bundles with <code class="docutils literal notranslate"><span class="pre">stdout</span></code>,
+<code class="docutils literal notranslate"><span class="pre">http</span></code> and <code class="docutils literal notranslate"><span class="pre">https</span></code>. To see the available outputs, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">outputs</span>
+</pre></div>
+</div>
+<p>This will also include any environment variables needed by that output.</p>
+<p>The bundled outputs are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">stdout</span></code></dt><dd><p>Write data to standard output</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">http</span></code> / <code class="docutils literal notranslate"><span class="pre">https</span></code></dt><dd><p>Write the data directly into InfluxDB using HTTP(s) POST requests. This
+requires additional environment variables (see the output of
+<code class="docutils literal notranslate"><span class="pre">--list-outputs</span></code>).</p>
+</dd>
+</dl>
+</section>
+<section id="queries">
+<h2>Queries<a class="headerlink" href="#queries" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pgflux</span></code> comes with a set of bundled queries. To select queries, specify them
+one by one on the command-line. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="n">db</span><span class="p">:</span><span class="n">disk_io</span> <span class="n">cluster</span><span class="p">:</span><span class="n">query_ages</span>
+</pre></div>
+</div>
+<p>To list all available queries, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">queries</span>
+</pre></div>
+</div>
+<p>Some queries may appear multiple times in case the implementation changed
+between PostgreSQL versions.</p>
+<p>The queries fall into two categories, identified by their prefix:</p>
+<dl class="simple">
+<dt>db (Database-Local)</dt><dd><p>These queries are relative to the current connection. As such, to fetch
+these statistics, a new connection to the database needs to be opened.</p>
+</dd>
+<dt>cluster</dt><dd><p>Tese queries are independent of the current connection and work for the
+whole database cluster.</p>
+</dd>
+</dl>
+<p>Additionally, each query has a <em>minimum</em> version attached representing the
+PostgreSQL version where this query starts being supported.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="pgflux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-right" title="Development &amp; Extending" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Michel Albert.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

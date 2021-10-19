@@ -15,12 +15,25 @@ It enables Grafana Visualisations as seen in the screenshots below:
   :target: _images/grafana-dashboard-03.png
 
 
+Installation
+============
+
+The project is currently very much usable but not *officially* released yet (no
+PyPI packages).
+
+It is however installable via ``git`` or ``http`` directly::
+
+    pip install "git+https://github.com/exhuma/pgflux@initial-release"
+
+
 Documents
 ---------
 
 .. toctree::
     :maxdepth: 1
 
+    usage
+    development
     api/pgflux
 
 

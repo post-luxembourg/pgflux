@@ -1,6 +1,14 @@
 pgflux package
 ==============
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pgflux.output
+
 Submodules
 ----------
 
@@ -16,6 +24,22 @@ pgflux.core module
 ------------------
 
 .. automodule:: pgflux.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pgflux.enums module
+-------------------
+
+.. automodule:: pgflux.enums
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pgflux.exc module
+-----------------
+
+.. automodule:: pgflux.exc
    :members:
    :undoc-members:
    :show-inheritance:
