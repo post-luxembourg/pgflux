@@ -11,6 +11,7 @@
 
 # version   ; type    ; subject                                                           ; issues  ;i;h;date      ;detail
 #--------------------------------------------------------------------------------------------------------------------------
+1.0.0a0     ; support ; Initial Release                                                   ;         ; ; ;2021-10-20
 1.0.0a0     ; support ; Remvoe rundant "0" values from connection stats                   ;         ; ; ;2021-10-07
 1.0.0a1     ; support ; Initial Release                                                   ;         ; ; ;2021-10-06
 
