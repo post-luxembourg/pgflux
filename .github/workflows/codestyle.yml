@@ -1,0 +1,29 @@
+---
+name: Code Style
+
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches: ["master", "develop"]
+  pull_request:
+    branches: ["master", "develop"]
+
+jobs:
+  check-style:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python3 -m venv env
+          ./env/bin/pip install -U pip pre-commit
+      - name: Run pre-commit checks
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          ./env/bin/pre-commit run -a
