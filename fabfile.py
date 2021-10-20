@@ -39,7 +39,7 @@ def test(context):
 
 @task
 def doc(context):
-    context.run("./env/bin/sphinx-apidoc -o doc/api -f pgflux")
+    context.run("./env/bin/sphinx-apidoc -o doc-src/api -f pgflux")
     context.run(
-        "./env/bin/sphinx-build -a doc/ docs", pty=True, replace_env=False
+        "./env/bin/sphinx-build -a doc-src/ docs", pty=True, replace_env=False
     )

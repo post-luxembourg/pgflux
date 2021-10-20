@@ -69,7 +69,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc-src/_build/
 
 # PyBuilder
 .pybuilder/
@@ -142,4 +142,4 @@ cython_debug/
 /.ept
 /doc/_static/changelog.json
 /doc/changelog.md
-/doc/api
+/doc-src/api
