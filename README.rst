@@ -19,12 +19,12 @@ It enables Grafana visualisations as seen in the screenshots below:
 Installation
 ============
 
-The project is currently very much usable but not *officially* released yet (no
-PyPI packages).
+The project can be installed directly via ``pip``::
 
-It is however installable via ``git`` or ``http`` directly::
+    python3 -m venv /path/to/virtual-env
+    /path/to/virtual-env/bin/pip install pgflux
 
-    pip install "git+https://github.com/exhuma/pgflux@initial-release"
+The use of a virtual environment is optional, but recommended.
 
 
 Usage
