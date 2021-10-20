@@ -1,0 +1,28 @@
+---
+include:
+  - project: oss/gitlab-runner
+    file: /ci-includes/pypackage.yml
+    ref: master
+
+
+variables:
+  bb_sonar_project_name: ${CI_PROJECT_NAME}
+
+  # Required for the shared pipeline
+  REFERENCE_PROJECT: "oss/\
+                      pgflux"
+  REFERENCE_BRANCH: "master"
+
+
+create-environment:
+  extends: ".create-environment"
+  after_script:
+    - ./env/bin/fab
+      initialise
+      --unattended
+      --target-path=.ept/pgflux-test
+    - chmod 600 .ept/ipbase-test/app.ini
+
+
+unit-tests:
+  extends: ".unit-tests"

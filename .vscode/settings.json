@@ -1,0 +1,19 @@
+{
+    "python.analysis.typeCheckingMode": "strict",
+    "files.watcherExclude": {
+        "**/env/**": true
+    },
+    "editor.rulers": [
+        80
+    ],
+    "files.exclude": {
+        "**/__pycache__/**": true
+    },
+    "search.exclude": {
+        "**/*.pyc": true
+    },
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+}
