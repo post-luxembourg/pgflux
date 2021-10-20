@@ -30,13 +30,13 @@ The use of a virtual environment is optional, but recommended.
 Usage
 =====
 
-See https://exhuma.github.io/pgflux/usage.html
+See https://post-luxembourg.github.io/pgflux/usage.html
 
 
 Development & Extending
 =======================
 
-For detailed instructions, see https://exhuma.github.io/pgflux/development.html
+For detailed instructions, see https://post-luxembourg.github.io/pgflux/development.html
 
 
 NOTE
