@@ -43,6 +43,9 @@ jobs:
           ./env/bin/pip install -U pip
           ./env/bin/pip install -e .[test]
       - name: Test with pytest
+        env:
+          PGFLUX_POSTGRES_DSN: >-
+            postgresql://postgres:mys3cr37passw0rd@postgres/postgres"
         run: |
           ./env/bin/pytest
 
