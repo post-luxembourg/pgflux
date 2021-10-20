@@ -24,6 +24,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: mys3cr37passw0rd
+          POSTGRES_DB: testdb
         ports:
           - 5432:5432
         options: >-
@@ -45,7 +46,7 @@ jobs:
       - name: Test with pytest
         env:
           PGFLUX_POSTGRES_DSN: >-
-            postgresql://postgres:mys3cr37passw0rd@localhost/postgres"
+            postgresql://postgres:mys3cr37passw0rd@localhost/testdb
         run: |
           ./env/bin/pytest
 
