@@ -32,6 +32,7 @@ def run_dev_containers(context, reset=True):
         if reset:
             context.run("docker-compose down", pty=True, replace_env=False)
 
+
 @task
 def test(context):
     context.run("./env/bin/pytest", pty=True, replace_env=False)
