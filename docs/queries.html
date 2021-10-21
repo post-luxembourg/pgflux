@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queries &mdash; pgflux 1.0.0.post4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development &amp; Maintenance" href="development.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pgflux
+          </a>
+              <div class="version">
+                1.0.0.post4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#extending-with-new-queries-execution-details">Extending with new Queries &amp; Execution Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query-scopes">Query Scopes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development &amp; Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pgflux</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Queries</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/queries.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="queries">
+<span id="id1"></span><h1>Queries<a class="headerlink" href="#queries" title="Permalink to this headline"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pgflux</span></code> comes with several bundled queries. They can be listed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">queries</span>
+</pre></div>
+</div>
+<p>To run all queries, use <code class="docutils literal notranslate"><span class="pre">--all</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>To run only <em>some</em> queries, use them as positional arguments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="n">db</span><span class="p">:</span><span class="n">disk_id</span> <span class="n">cluster</span><span class="p">:</span><span class="n">locks</span>
+</pre></div>
+</div>
+<section id="extending-with-new-queries-execution-details">
+<h2>Extending with new Queries &amp; Execution Details<a class="headerlink" href="#extending-with-new-queries-execution-details" title="Permalink to this headline"></a></h2>
+<p>See <a class="reference internal" href="development.html#development"><span class="std std-ref">Development &amp; Maintenance</span></a></p>
+</section>
+<section id="query-scopes">
+<h2>Query Scopes<a class="headerlink" href="#query-scopes" title="Permalink to this headline"></a></h2>
+<p>Queries are separated into two groups:</p>
+<dl>
+<dt><strong>Cluster Global</strong> (prefix: <code class="docutils literal notranslate"><span class="pre">cluster</span></code>)</dt><dd><p>These queries can be run on any connection. In <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> they will
+use the connection defined by the <code class="docutils literal notranslate"><span class="pre">PGFLUX_POSTGRES_DSN</span></code>
+environment variable.</p>
+</dd>
+<dt><strong>Database Local</strong> (prefix: <code class="docutils literal notranslate"><span class="pre">db</span></code>)</dt><dd><p>These queries return statistics from the <em>currently connected</em>
+database.</p>
+<p>When fetching metrics, <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> will reuse the credentials from the
+<code class="docutils literal notranslate"><span class="pre">PGFLUX_POSTGRES_DSN</span></code> environment variable and open a new
+connection on each of those databases to fetch the metrics.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-right" title="Development &amp; Maintenance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Post Luxembourg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

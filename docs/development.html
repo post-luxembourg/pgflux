@@ -4,13 +4,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development &amp; Extending &mdash; pgflux 1.0.0.post4 documentation</title>
+  <title>Development &amp; Maintenance &mdash; pgflux 1.0.0.post4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-
+  
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
@@ -19,10 +19,10 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pgflux package" href="api/pgflux.html" />
-    <link rel="prev" title="Usage" href="usage.html" />
+    <link rel="prev" title="Queries" href="queries.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -42,8 +42,19 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development &amp; Extending</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">pgflux package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development &amp; Maintenance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#queries">Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#folder-structure-version-matching">Folder Structure &amp; Version Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-execution-requirements">Query Execution &amp; Requirements</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">API</a></li>
 </ul>
 
         </div>
@@ -60,7 +71,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Development &amp; Extending</li>
+      <li>Development &amp; Maintenance</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -69,17 +80,105 @@
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
-  <section id="development-extending">
-<h1>Development &amp; Extending<a class="headerlink" href="#development-extending" title="Permalink to this headline"></a></h1>
-<p>TODO</p>
+             
+  <section id="development-maintenance">
+<span id="development"></span><h1>Development &amp; Maintenance<a class="headerlink" href="#development-maintenance" title="Permalink to this headline"></a></h1>
+<section id="queries">
+<h2>Queries<a class="headerlink" href="#queries" title="Permalink to this headline"></a></h2>
+<section id="folder-structure-version-matching">
+<h3>Folder Structure &amp; Version Matching<a class="headerlink" href="#folder-structure-version-matching" title="Permalink to this headline"></a></h3>
+<p>Bundled query files are located in <code class="docutils literal notranslate"><span class="pre">pgflux/queries</span></code> of the source tree
+with the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>pgflux/queries
+├── cluster
+│   ├── connections
+│   │   ├── 0.0.sql
+│   │   ├── 10.0.sql
+│   │   └── 9.2.sql
+┆   ┆
+│   └── transactions
+│       └── 0.0.sql
+└── db
+    └── size_by_db
+        └── 0.0.sql
+</pre></div>
+</div>
+<p>The first level must be either <code class="docutils literal notranslate"><span class="pre">cluster</span></code> or <code class="docutils literal notranslate"><span class="pre">db</span></code>. See <a class="reference internal" href="queries.html#queries"><span class="std std-ref">Queries</span></a>
+for their meaning.</p>
+<p>The second level is used as InfluxDB measurement name and must be valid
+in that context. The above example contains the measurement names
+<code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">transactions</span></code> and <code class="docutils literal notranslate"><span class="pre">size_by_db</span></code>.</p>
+<p>The <em>filename</em> must represent the major/minor PostgreSQL version at which
+this query was supported. A file with the name <code class="docutils literal notranslate"><span class="pre">0.0.sql</span></code> is a wildcard
+and is executed against any PostgreSQL version. If multiple files are
+found, the query is picked that has the <em>highest</em> major/version number
+that is still <em>below</em> the current PostgreSQL version. For example, with
+the queries above, <code class="docutils literal notranslate"><span class="pre">connections</span></code> has a definition for <code class="docutils literal notranslate"><span class="pre">0.0</span></code> (the
+wildcard), <code class="docutils literal notranslate"><span class="pre">9.2</span></code> and <code class="docutils literal notranslate"><span class="pre">10.0</span></code>. The filenames are picked as follows:</p>
+<ul class="simple">
+<li><p>On PostgreSQL 9.0 → Use <code class="docutils literal notranslate"><span class="pre">0.0.sql</span></code></p></li>
+<li><p>On PostgreSQL 9.2 → Use <code class="docutils literal notranslate"><span class="pre">9.2.sql</span></code></p></li>
+<li><p>On PostgreSQL 9.4 → Use <code class="docutils literal notranslate"><span class="pre">9.2.sql</span></code></p></li>
+<li><p>On PostgreSQL 10.5 → Use <code class="docutils literal notranslate"><span class="pre">10.0.sql</span></code></p></li>
+</ul>
+<p>This lookup allows us to easily adapt to changes in PostgreSQL.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is quite possible that newer PostgreSQL versions provide more
+detailed statistics by adding new columns and/or changing values in
+major releases.</p>
+<p>To keep the InfluxDB manageable it is <strong>strongly</strong> recommended to
+keep the column-names, types and values compatible across the
+versions. See <code class="docutils literal notranslate"><span class="pre">pgflux/queries/cluster/connections</span></code> as an example
+where care has been taken to translate some changing values to
+something stable across the different versions.</p>
+<p>However, <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> does not <em>enforce</em> this.</p>
+</div>
+</section>
+<section id="query-execution-requirements">
+<h3>Query Execution &amp; Requirements<a class="headerlink" href="#query-execution-requirements" title="Permalink to this headline"></a></h3>
+<p>When executing a query, <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> does the following:</p>
+<ul class="simple">
+<li><p>Each column prefixed with <code class="docutils literal notranslate"><span class="pre">tag:</span></code> will become an InfluxDB tag using
+the column-name as tag-name and column-value as tag-value.</p></li>
+<li><p>The column <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> is interpreted as <strong>seconds</strong> from “epoch”
+(a classical Unix-Timestamp).</p></li>
+<li><p>Every remaining column will be used as InfluxDB measurement values.</p></li>
+<li><p>The folder-name containing the query is used as the InfluxDB
+measurement-name.</p></li>
+</ul>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h4>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Filename: <code class="docutils literal notranslate"><span class="pre">queries/global_sizes/0.0.sql</span></code></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span> <span class="k">SELECT</span>
+     <span class="n">datname</span> <span class="k">AS</span> <span class="ss">&quot;tag:database&quot;</span><span class="p">,</span>
+     <span class="n">pg_database_size</span><span class="p">(</span><span class="n">datname</span><span class="p">)</span> <span class="k">AS</span> <span class="k">size</span><span class="p">,</span>
+     <span class="k">EXTRACT</span><span class="p">(</span><span class="n">EPOCH</span> <span class="k">FROM</span> <span class="n">NOW</span><span class="p">())</span> <span class="k">AS</span> <span class="ss">&quot;timestamp&quot;</span>
+ <span class="k">FROM</span> <span class="n">pg_database</span> <span class="k">WHERE</span> <span class="n">datistemplate</span><span class="o">=</span><span class="k">false</span>
+</pre></div>
+</div>
+</div>
+<p>This query will create InfluxDB rows with…</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>… a tag with the name “database” and the values using the
+“datname” column of <code class="docutils literal notranslate"><span class="pre">pg_database</span></code></p></li>
+<li><p>… a field with the name <code class="docutils literal notranslate"><span class="pre">size</span></code> and the value taken from
+<code class="docutils literal notranslate"><span class="pre">pg_database_size()</span></code>.</p></li>
+<li><p>… the current time as InfluxDB timestamp.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="queries.html" class="btn btn-neutral float-left" title="Queries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="api/pgflux.html" class="btn btn-neutral float-right" title="pgflux package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -92,7 +191,7 @@
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-
+   
 
 </footer>
         </div>
@@ -103,7 +202,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
+  </script> 
 
 </body>
 </html>

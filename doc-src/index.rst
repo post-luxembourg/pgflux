@@ -33,8 +33,9 @@ Documents
     :maxdepth: 1
 
     usage
+    queries
     development
-    api/pgflux
+    API <api/pgflux>
 
 
 Indices and tables

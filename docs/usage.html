@@ -10,7 +10,7 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-
+  
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
@@ -18,11 +18,11 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Development &amp; Extending" href="development.html" />
-    <link rel="prev" title="pgflux" href="index.html" />
+    <link rel="next" title="Queries" href="queries.html" />
+    <link rel="prev" title="pgflux" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -48,8 +48,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#queries">Queries</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development &amp; Extending</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">pgflux package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development &amp; Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pgflux.html">API</a></li>
 </ul>
 
         </div>
@@ -75,7 +76,7 @@
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
+             
   <section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h1>
 <section id="configuration">
@@ -116,28 +117,7 @@ requires additional environment variables (see the output of
 </section>
 <section id="queries">
 <h2>Queries<a class="headerlink" href="#queries" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pgflux</span></code> comes with a set of bundled queries. To select queries, specify them
-one by one on the command-line. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="n">db</span><span class="p">:</span><span class="n">disk_io</span> <span class="n">cluster</span><span class="p">:</span><span class="n">query_ages</span>
-</pre></div>
-</div>
-<p>To list all available queries, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">queries</span>
-</pre></div>
-</div>
-<p>Some queries may appear multiple times in case the implementation changed
-between PostgreSQL versions.</p>
-<p>The queries fall into two categories, identified by their prefix:</p>
-<dl class="simple">
-<dt>db (Database-Local)</dt><dd><p>These queries are relative to the current connection. As such, to fetch
-these statistics, a new connection to the database needs to be opened.</p>
-</dd>
-<dt>cluster</dt><dd><p>Tese queries are independent of the current connection and work for the
-whole database cluster.</p>
-</dd>
-</dl>
-<p>Additionally, each query has a <em>minimum</em> version attached representing the
-PostgreSQL version where this query starts being supported.</p>
+<p>See <a class="reference internal" href="queries.html#queries"><span class="std std-ref">Queries</span></a></p>
 </section>
 </section>
 
@@ -146,7 +126,7 @@ PostgreSQL version where this query starts being supported.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="pgflux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="development.html" class="btn btn-neutral float-right" title="Development &amp; Extending" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="queries.html" class="btn btn-neutral float-right" title="Queries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
@@ -158,7 +138,7 @@ PostgreSQL version where this query starts being supported.</p>
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-
+   
 
 </footer>
         </div>
@@ -169,7 +149,7 @@ PostgreSQL version where this query starts being supported.</p>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
+  </script> 
 
 </body>
 </html>

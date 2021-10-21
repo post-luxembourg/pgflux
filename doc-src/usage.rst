@@ -45,27 +45,4 @@ The bundled outputs are:
 Queries
 -------
 
-``pgflux`` comes with a set of bundled queries. To select queries, specify them
-one by one on the command-line. For example::
-
-    pgflux db:disk_io cluster:query_ages
-
-To list all available queries, run::
-
-    pgflux --list-queries
-
-Some queries may appear multiple times in case the implementation changed
-between PostgreSQL versions.
-
-The queries fall into two categories, identified by their prefix:
-
-db (Database-Local)
-    These queries are relative to the current connection. As such, to fetch
-    these statistics, a new connection to the database needs to be opened.
-
-cluster
-    Tese queries are independent of the current connection and work for the
-    whole database cluster.
-
-Additionally, each query has a *minimum* version attached representing the
-PostgreSQL version where this query starts being supported.
+See :ref:`queries`
