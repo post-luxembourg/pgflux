@@ -115,6 +115,7 @@ class HTTPOutput(Output):
         with self.connect() as influx_meta:
             connection, headers, params = influx_meta
             send_to_influx(connection, headers, params, "\n".join(self.lines))
+        self.lines.clear()
 
 
 class HTTPSOutput(HTTPOutput):
