@@ -1,4 +1,5 @@
 import http.client
+import logging
 import urllib.parse
 from base64 import b64encode
 from contextlib import contextmanager
@@ -8,8 +9,6 @@ from typing import Dict, Generator, List, Tuple
 from pgflux.core import PgFluxException
 from pgflux.enums import Precision
 from pgflux.output.interface import Output
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
