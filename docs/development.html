@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pgflux package" href="api/pgflux.html" />
-    <link rel="prev" title="Database Selection" href="dbselection.html" /> 
+    <link rel="prev" title="Grafana Dashboard" href="grafana-dashboard.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,11 +41,20 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dbselection.html">Database Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grafana-dashboard.html">Grafana Dashboard</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development &amp; Maintenance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#queries">Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-environment">Development Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grafana-setup">Grafana Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#influxdb-data-source">InfluxDB Data Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-the-data-source">Testing the Data Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-dashboard">Sample Dashboard</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#query-development-maintenance">Query Development &amp; Maintenance</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#folder-structure-version-matching">Folder Structure &amp; Version Matching</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query-execution-requirements">Query Execution &amp; Requirements</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
@@ -84,8 +93,94 @@
              
   <section id="development-maintenance">
 <span id="development"></span><h1>Development &amp; Maintenance<a class="headerlink" href="#development-maintenance" title="Permalink to this headline"></a></h1>
-<section id="queries">
-<h2>Queries<a class="headerlink" href="#queries" title="Permalink to this headline"></a></h2>
+<section id="development-environment">
+<h2>Development Environment<a class="headerlink" href="#development-environment" title="Permalink to this headline"></a></h2>
+<p>We use <a class="reference external" href="https://fabfile.org">fabric</a> as development helper. All tasks are defined in <code class="docutils literal notranslate"><span class="pre">fabfile.py</span></code> in
+the root source tree. If you don’t want to use <code class="docutils literal notranslate"><span class="pre">fabric</span></code>, that file should
+contain enough information to get started.</p>
+<p>To set up a basic development environment simply run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fab</span> <span class="n">develop</span>
+</pre></div>
+</div>
+<p>The project can read environment variables from a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file. A template can
+be found in <code class="docutils literal notranslate"><span class="pre">.env.template</span></code>. By running <code class="docutils literal notranslate"><span class="pre">fab</span> <span class="pre">develop</span></code> a basic env-file will
+be materialised.</p>
+<p>A collection of docker-containers with PostgreSQL, InfluxDB and Grafana are
+provided via a <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> file and can be run using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fab</span> <span class="n">run</span><span class="o">-</span><span class="n">dev</span><span class="o">-</span><span class="n">containers</span>
+</pre></div>
+</div>
+<p>Once the containers are running, <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> should be able to connect and run.
+The following command should show output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>If that works, it will be possible to start collecting metrics using something
+like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">watch</span> <span class="o">-</span><span class="n">n</span> <span class="mi">300</span> <span class="o">./</span><span class="n">env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pgflux</span> <span class="o">--</span><span class="nb">all</span> <span class="o">-</span><span class="n">o</span> <span class="n">http</span>
+</pre></div>
+</div>
+<p>The environment-variables in <code class="docutils literal notranslate"><span class="pre">.env</span></code> should be set up to send HTTP traffic to
+the container from the docker-compose file.</p>
+<p>Note that the sample dashboard has a minimum granularity of 5 minutes, so
+sending more often than that does not make a lot of sense.</p>
+<p>Once the first data point is collected (immediatly after <code class="docutils literal notranslate"><span class="pre">pgflux</span></code> was executed
+with the <code class="docutils literal notranslate"><span class="pre">http</span></code> output) we can inspect the data in Grafana.</p>
+<p>Connect to <a class="reference external" href="http://localhost:3000">http://localhost:3000</a> (provided via the docker-compose file) and log
+in using <code class="docutils literal notranslate"><span class="pre">admin</span></code>/<code class="docutils literal notranslate"><span class="pre">admin</span></code>. It should ask you to reset the password.</p>
+</section>
+<section id="grafana-setup">
+<h2>Grafana Setup<a class="headerlink" href="#grafana-setup" title="Permalink to this headline"></a></h2>
+<section id="influxdb-data-source">
+<h3>InfluxDB Data Source<a class="headerlink" href="#influxdb-data-source" title="Permalink to this headline"></a></h3>
+<p>The “InfluxDB” host inside the docker-compose stack is called <code class="docutils literal notranslate"><span class="pre">influx</span></code>. With
+that in mind:</p>
+<ul>
+<li><p>In Grafana, navigate to “Configuration” (the Cog icon) -&gt; Data sources</p></li>
+<li><p>Click on “Add data source”</p></li>
+<li><p>Select InfluxDB</p></li>
+<li><p>Use the following settings:</p>
+<dl class="simple">
+<dt>Name</dt><dd><p>InfluxDB <em>(this value is referenced in the dashboard template. If you change
+it here, it must also be changed in the dashboard JSON file)</em></p>
+</dd>
+<dt>URL</dt><dd><p><a class="reference external" href="http://influx:8086">http://influx:8086</a></p>
+</dd>
+<dt>Database</dt><dd><p>postgres_stats</p>
+</dd>
+</dl>
+</li>
+<li><p>Click on “Save &amp; Test”. The data source should now be working. If it does not,
+make sure you followed the instructions from before properly.</p></li>
+</ul>
+</section>
+<section id="testing-the-data-source">
+<h3>Testing the Data Source<a class="headerlink" href="#testing-the-data-source" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>In Grafana, navigate to “Explore” (the compass icon)</p></li>
+<li><p>Ensure that “InfluxDB” (our data-source) is selected in the top-left
+drop-down.</p></li>
+<li><p>Click on “select measurement”.</p></li>
+</ul>
+<p>If you see items in that drop-down box, the setup is working and we can continue
+on to a dashboard.</p>
+</section>
+<section id="sample-dashboard">
+<span id="id1"></span><h3>Sample Dashboard<a class="headerlink" href="#sample-dashboard" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Open the file <a class="reference external" href="https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/grafana-dashboard.json.template">grafana-dashboard.json.template</a> from the project source tree.</p></li>
+<li><p>In Grafana, navigate to “Create” (the “+” icon) -&gt; “Import”</p></li>
+<li><p>Click on “Upload JSON File”</p></li>
+<li><p>Select the template file (as linked above)</p></li>
+<li><p>Click on “Import”</p></li>
+</ul>
+<p>You should now see the dashboard. If no values appear yet, give it at lease 5
+minutes because the minimum “interval” is set to 5 minutes in almost every
+graph.</p>
+</section>
+</section>
+<section id="query-development-maintenance">
+<span id="query-mainenance"></span><h2>Query Development &amp; Maintenance<a class="headerlink" href="#query-development-maintenance" title="Permalink to this headline"></a></h2>
 <section id="folder-structure-version-matching">
 <h3>Folder Structure &amp; Version Matching<a class="headerlink" href="#folder-structure-version-matching" title="Permalink to this headline"></a></h3>
 <p>Bundled query files are located in <code class="docutils literal notranslate"><span class="pre">pgflux/queries</span></code> of the source tree
@@ -150,8 +245,8 @@ measurement-name.</p></li>
 </ul>
 <section id="example">
 <h4>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h4>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Filename: <code class="docutils literal notranslate"><span class="pre">queries/global_sizes/0.0.sql</span></code></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Filename: <code class="docutils literal notranslate"><span class="pre">queries/global_sizes/0.0.sql</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span> <span class="k">SELECT</span>
      <span class="n">datname</span> <span class="k">AS</span> <span class="ss">&quot;tag:database&quot;</span><span class="p">,</span>
      <span class="n">pg_database_size</span><span class="p">(</span><span class="n">datname</span><span class="p">)</span> <span class="k">AS</span> <span class="k">size</span><span class="p">,</span>
@@ -180,7 +275,7 @@ measurement-name.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="dbselection.html" class="btn btn-neutral float-left" title="Database Selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="grafana-dashboard.html" class="btn btn-neutral float-left" title="Grafana Dashboard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="api/pgflux.html" class="btn btn-neutral float-right" title="pgflux package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

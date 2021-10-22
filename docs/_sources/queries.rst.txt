@@ -19,7 +19,7 @@ To run only *some* queries, use them as positional arguments::
 Extending with new Queries & Execution Details
 ----------------------------------------------
 
-See :ref:`development`
+See :ref:`query-mainenance`
 
 
 Query Scopes
