@@ -93,6 +93,7 @@ Example
 
 This query will create InfluxDB rows with...
 
+    * ... ``global_sizes`` as measurement name (taken from the filename/path)
     * ... a tag with the name "database" and the values using the
       "datname" column of ``pg_database``
     * ... a field with the name ``size`` and the value taken from

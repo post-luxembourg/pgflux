@@ -38,4 +38,5 @@ extlinks = {
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
+    "psycopg2": ("https://www.psycopg.org/docs/", None),
 }

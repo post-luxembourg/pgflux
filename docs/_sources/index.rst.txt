@@ -34,6 +34,7 @@ Documents
 
     usage
     queries
+    dbselection
     development
     API <api/pgflux>
 

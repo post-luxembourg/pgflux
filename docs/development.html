@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pgflux package" href="api/pgflux.html" />
-    <link rel="prev" title="Queries" href="queries.html" /> 
+    <link rel="prev" title="Database Selection" href="dbselection.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,6 +43,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dbselection.html">Database Selection</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development &amp; Maintenance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#queries">Queries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#folder-structure-version-matching">Folder Structure &amp; Version Matching</a></li>
@@ -162,6 +163,7 @@ measurement-name.</p></li>
 <p>This query will create InfluxDB rows with…</p>
 <blockquote>
 <div><ul class="simple">
+<li><p>… <code class="docutils literal notranslate"><span class="pre">global_sizes</span></code> as measurement name (taken from the filename/path)</p></li>
 <li><p>… a tag with the name “database” and the values using the
 “datname” column of <code class="docutils literal notranslate"><span class="pre">pg_database</span></code></p></li>
 <li><p>… a field with the name <code class="docutils literal notranslate"><span class="pre">size</span></code> and the value taken from
@@ -178,7 +180,7 @@ measurement-name.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="queries.html" class="btn btn-neutral float-left" title="Queries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dbselection.html" class="btn btn-neutral float-left" title="Database Selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="api/pgflux.html" class="btn btn-neutral float-right" title="pgflux package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

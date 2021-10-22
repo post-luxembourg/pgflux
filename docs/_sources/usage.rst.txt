@@ -10,6 +10,9 @@ open a connection to the PostgreSQL cluster to fetch the statistics. Example::
 
     PGFLUX_POSTGRES_DSN=postgresql://postgres:mys3cr37@localhost/postgres
 
+The DSN value is passed directly into :py:func:`psycopg2.connect`. See its
+documentation for details on DSN formatting.
+
 Quickstart
 ----------
 
