@@ -45,7 +45,8 @@ setup(
         "Typing :: Typed",
     ],
     project_urls={
-        "Repository": "https://github.com/post-luxembourg/pgflux",
+        "Source": "https://github.com/post-luxembourg/pgflux",
+        "Tracker": "https://github.com/post-luxembourg/pgflux/issues",
         "Documentation": "https://post-luxembourg.github.io/pgflux/",
     },
     keywords={"influxdb", "postgresql"},
