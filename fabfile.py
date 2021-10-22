@@ -52,5 +52,7 @@ def autodoc(context):
     Monitor for changes and re-build docs
     """
     context.run(
-        "git ls-files | entr -c sh -c 'fab doc'", replace_env=False, pty=False
+        "git ls-files doc-src pgflux | entr -c sh -c 'fab doc'",
+        replace_env=False,
+        pty=False,
     )
