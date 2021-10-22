@@ -143,3 +143,4 @@ cython_debug/
 /doc/_static/changelog.json
 /doc/changelog.md
 /doc-src/api
+/grafana-dashboard.json
