@@ -6,14 +6,14 @@ drivers when developing this tool were:
 
 It enables Grafana visualisations as seen in the screenshots below:
 
-.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-01.png
-  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-01.png
+.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-01.png
+  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-01.png
 
-.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-02.png
-  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-02.png
+.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-02.png
+  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-02.png
 
-.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-03.png
-  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/docs/_images/grafana-dashboard-03.png
+.. image:: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-03.png
+  :target: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/docs/_images/grafana-dashboard-03.png
 
 
 Installation

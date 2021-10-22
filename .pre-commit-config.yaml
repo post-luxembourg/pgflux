@@ -1,6 +1,7 @@
 ---
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+exclude: "^docs/.*"
 repos:
   - repo: https://github.com/PyCQA/isort
     rev: 5.9.3
@@ -25,3 +26,7 @@ repos:
     rev: v1.26.3
     hooks:
       - id: yamllint
+  - repo: https://github.com/regebro/pyroma
+    rev: "3.2"
+    hooks:
+      - id: pyroma

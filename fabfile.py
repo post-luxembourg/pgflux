@@ -44,3 +44,15 @@ def doc(context):
     context.run(
         "./env/bin/sphinx-build -a doc-src/ docs", pty=True, replace_env=False
     )
+
+
+@task
+def autodoc(context):
+    """
+    Monitor for changes and re-build docs
+    """
+    context.run(
+        "git ls-files doc-src pgflux | entr -c sh -c 'fab doc'",
+        replace_env=False,
+        pty=False,
+    )

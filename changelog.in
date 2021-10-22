@@ -11,6 +11,8 @@
 
 # version   ; type    ; subject                                                           ; issues  ;i;h;date      ;detail
 #--------------------------------------------------------------------------------------------------------------------------
+1.0.1       ; fixed   ; Clear queue HTTP data after flush (avoids duplicate data points)  ;         ; ; ;2021-10-22
+1.0.1       ; support ; Finish up initial documentation                                   ;         ; ; ;2021-10-22
 1.0.0.post4 ; support ; Remove stale link in documentation                                ;         ; ; ;2021-10-20
 1.0.0.post3 ; support ; Update 'installation' section in the docs                         ;         ; ; ;2021-10-20
 1.0.0.post2 ; support ; Fix image links in README                                         ;         ; ; ;2021-10-20

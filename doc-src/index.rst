@@ -32,9 +32,13 @@ Documents
 .. toctree::
     :maxdepth: 1
 
+    installation
     usage
+    queries
+    dbselection
+    grafana-dashboard
     development
-    api/pgflux
+    API <api/pgflux>
 
 
 Indices and tables
