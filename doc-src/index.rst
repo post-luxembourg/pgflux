@@ -35,6 +35,7 @@ Documents
     usage
     queries
     dbselection
+    grafana-dashboard
     development
     API <api/pgflux>
 
