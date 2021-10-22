@@ -3,8 +3,109 @@
 Development & Maintenance
 =========================
 
-Queries
--------
+Development Environment
+-----------------------
+
+We use fabric_ as development helper. All tasks are defined in ``fabfile.py`` in
+the root source tree. If you don't want to use ``fabric``, that file should
+contain enough information to get started.
+
+To set up a basic development environment simply run::
+
+    fab develop
+
+The project can read environment variables from a ``.env`` file. A template can
+be found in ``.env.template``. By running ``fab develop`` a basic env-file will
+be materialised.
+
+A collection of docker-containers with PostgreSQL, InfluxDB and Grafana are
+provided via a ``docker-compose`` file and can be run using::
+
+    fab run-dev-containers
+
+Once the containers are running, ``pgflux`` should be able to connect and run.
+The following command should show output::
+
+    ./env/bin/pgflux --all
+
+If that works, it will be possible to start collecting metrics using something
+like the following::
+
+    watch -n 300 ./env/bin/pgflux --all -o http
+
+The environment-variables in ``.env`` should be set up to send HTTP traffic to
+the container from the docker-compose file.
+
+Note that the sample dashboard has a minimum granularity of 5 minutes, so
+sending more often than that does not make a lot of sense.
+
+Once the first data point is collected (immediatly after ``pgflux`` was executed
+with the ``http`` output) we can inspect the data in Grafana.
+
+Connect to http://localhost:3000 (provided via the docker-compose file) and log
+in using ``admin``/``admin``. It should ask you to reset the password.
+
+Grafana Setup
+-------------
+
+InfluxDB Data Source
+~~~~~~~~~~~~~~~~~~~~
+
+The "InfluxDB" host inside the docker-compose stack is called ``influx``. With
+that in mind:
+
+* In Grafana, navigate to "Configuration" (the Cog icon) -> Data sources
+* Click on "Add data source"
+* Select InfluxDB
+* Use the following settings:
+
+  Name
+    InfluxDB *(this value is referenced in the dashboard template. If you change
+    it here, it must also be changed in the dashboard JSON file)*
+  URL
+    http://influx:8086
+  Database
+    postgres_stats
+
+* Click on "Save & Test". The data source should now be working. If it does not,
+  make sure you followed the instructions from before properly.
+
+
+Testing the Data Source
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* In Grafana, navigate to "Explore" (the compass icon)
+* Ensure that "InfluxDB" (our data-source) is selected in the top-left
+  drop-down.
+* Click on "select measurement".
+
+If you see items in that drop-down box, the setup is working and we can continue
+on to a dashboard.
+
+
+.. _sample-dashboard:
+
+Sample Dashboard
+~~~~~~~~~~~~~~~~
+
+* Open the file `grafana-dashboard.json.template`_ from the project source tree.
+* In Grafana, navigate to "Create" (the "+" icon) -> "Import"
+* Click on "Upload JSON File"
+* Select the template file (as linked above)
+* Click on "Import"
+
+You should now see the dashboard. If no values appear yet, give it at lease 5
+minutes because the minimum "interval" is set to 5 minutes in almost every
+graph.
+
+.. _grafana-dashboard.json.template: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/grafana-dashboard.json.template
+.. _fabric: https://fabfile.org
+
+
+.. _query-mainenance:
+
+Query Development & Maintenance
+-------------------------------
 
 Folder Structure & Version Matching
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

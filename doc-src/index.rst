@@ -32,6 +32,7 @@ Documents
 .. toctree::
     :maxdepth: 1
 
+    installation
     usage
     queries
     dbselection

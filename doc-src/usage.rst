@@ -1,17 +1,9 @@
 Usage
 =====
 
-Configuration
--------------
+.. note::
 
-All remote-connection details are configured via environment-variables. The
-only "core" environment variable is ``PGFLUX_POSTGRES_DSN``. This is used to
-open a connection to the PostgreSQL cluster to fetch the statistics. Example::
-
-    PGFLUX_POSTGRES_DSN=postgresql://postgres:mys3cr37@localhost/postgres
-
-The DSN value is passed directly into :py:func:`psycopg2.connect`. See its
-documentation for details on DSN formatting.
+    See also: :ref:`configuration`
 
 Quickstart
 ----------
@@ -23,6 +15,13 @@ With only the ``PGFLUX_POSTGRES_DSN`` value set you can run::
 This runs all available queries against the given database cluster and writes
 the result to ``stdout``.
 
+
+Help
+----
+
+For quick help, you can run::
+
+    pgflux --help
 
 Outputs
 -------

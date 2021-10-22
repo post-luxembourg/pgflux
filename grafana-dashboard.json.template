@@ -41,7 +41,7 @@
       "type": "row"
     },
     {
-      "datasource": "{{data-source-name}}",
+      "datasource": "InfluxDB",
       "description": "This shows the *current* open connections on the selected server.",
       "fieldConfig": {
         "defaults": {
@@ -237,7 +237,7 @@
       "type": "stat"
     },
     {
-      "datasource": "{{data-source-name}}",
+      "datasource": "InfluxDB",
       "description": "Overall number of locks present in the database",
       "fieldConfig": {
         "defaults": {
@@ -337,7 +337,7 @@
       "type": "stat"
     },
     {
-      "datasource": "{{data-source-name}}",
+      "datasource": "InfluxDB",
       "description": "This graph combines all tuple access (inserts, updates and deletes) giving an overall activity indicator on the database",
       "fieldConfig": {
         "defaults": {
@@ -545,7 +545,7 @@
       "id": 54,
       "panels": [
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows any running queries at the time of measurement and their respective ages.\n\n* `Age`: The time in seconds oldest query has been actively running.\n* `Transaction Age`: The time in seconds the oldest transaction has been existing.",
           "fieldConfig": {
             "defaults": {
@@ -697,7 +697,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the number of transactions and their finishing states. Either committed or rolled back.",
           "fieldConfig": {
             "defaults": {
@@ -857,7 +857,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the number of locks currently in place in the DB cluster (per DB and per type).\n\nIf the lock is granted, it is listed as \"True\". If a process has requested the lock but it wasn't free yet, it if listed as \"False\".\n\n# Lock Types\n\n* `accesssharelock`: The SELECT command acquires a lock of this mode on referenced tables. In general, any query that only reads a table and does not modify it will acquire this lock mode.\n* `rowsharelock`: The SELECT FOR UPDATE and SELECT FOR SHARE commands acquire a lock of this mode on the target table(s) (in addition to ACCESS SHARE locks on any other tables that are referenced but not selected FOR UPDATE/FOR SHARE).\n* `rowexclusivelock`: The commands UPDATE, DELETE, and INSERT acquire this lock mode on the target table (in addition to ACCESS SHARE locks on any other referenced tables). In general, this lock mode will be acquired by any command that modifies data in a table.\n* `shareupdateexclusivelock`: Acquired by VACUUM (without FULL), ANALYZE, CREATE INDEX CONCURRENTLY, and some forms of ALTER TABLE.\n* `sharelock`: Acquired by CREATE INDEX (without CONCURRENTLY)\n* `sharerowexclusivelock`: This lock mode is not automatically acquired by any PostgreSQL command.\"\n* `exclusivelock`: This lock mode is not automatically acquired on tables by any PostgreSQL command.\n* `accessexclusivelock`: Acquired by the ALTER TABLE, DROP TABLE, TRUNCATE, REINDEX, CLUSTER, and VACUUM FULL commands. This is also the default lock mode for LOCK TABLE statements that do not specify a mode explicitly.\n",
           "fieldConfig": {
             "defaults": {
@@ -989,7 +989,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the different scan types executed on the database.\n\n* `Index Scan`: Whenever a query taps into an index\n* `Sequential Scan`: Whenever a query cannot use an index and decides to sequentially go through the table data",
           "fieldConfig": {
             "defaults": {
@@ -1148,7 +1148,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the number of rows/tuples modified in the main table-data.\n\n* `Deleted`: The number of deleted rows\n* `Updated`: The number of deleted rows\n* `Inserted`: The number of inserted rows\n* `HOT Updated`: The number of updated rows which did not require an index update",
           "fieldConfig": {
             "defaults": {
@@ -1369,7 +1369,7 @@
       "id": 235,
       "panels": [
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the number of transactions and their finishing states. Either committed or rolled back.",
           "fieldConfig": {
             "defaults": {
@@ -1546,7 +1546,7 @@
       "id": 218,
       "panels": [
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "# Description\n\nThis graph shows a breakdown of disk-usage for the selected database(s). The breakdown shows the following fields:\n\n* `Data`: The disk usage by the main data of the tables.\n* `Visibility Map`: Size of metadata used by the VACUUM process.\n* `Free Space Map`: The Free Space map contains metadata where unused/reclaimable pages are located on disk.\n* `TOAST`: Space used by data which is larger than one \"page\".\n* `Indices`: Size of all indices\n* `Total Size`: Size of the DB folder on disk. If this is larger than the combined breakdown, it may indicate additional files on disk which don't belong in the DB.",
           "fieldConfig": {
             "defaults": {
@@ -1814,7 +1814,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "This graph shows the disk-usage occupied by temporary files.",
           "fieldConfig": {
             "defaults": {
@@ -1967,7 +1967,7 @@
       "id": 214,
       "panels": [
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "# Description\n\nThis graph shows I/O operations on database indices.\n\n\"hit\" values are direct PostgreSQL buffer hits. \"Read\" values go out to OS kernel for physical disk reads. Note that physical disk reads can still be cached by the kernel and not require physical reads. But whether this happens or not is invisible to the PostgreSQL process.",
           "fieldConfig": {
             "defaults": {
@@ -2127,7 +2127,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "# Description\n\nThis graph shows I/O operations on the disk for user-space tables.\n\n\"hit\" values are direct PostgreSQL buffer hits. \"Read\" values go out to OS kernel for physical disk reads. Note that physical disk reads can still be cached by the kernel and not require physical reads. But whether this happens or not is invisible to the PostgreSQL process.",
           "fieldConfig": {
             "defaults": {
@@ -2418,7 +2418,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "# Description\n\nThis graph shows I/O operations on database sequences.\n\n\"hit\" values are direct PostgreSQL buffer hits. \"Read\" values go out to OS kernel for physical disk reads. Note that physical disk reads can still be cached by the kernel and not require physical reads. But whether this happens or not is invisible to the PostgreSQL process.",
           "fieldConfig": {
             "defaults": {
@@ -2593,7 +2593,7 @@
       "id": 4,
       "panels": [
         {
-          "datasource": "{{data-source-name}}",
+          "datasource": "InfluxDB",
           "description": "# Description\n\nShows an overview of connections and their type on the PostgreSQL cluster.\n\n# Fields\n\n* `Waiting for Lock`: Connections which are waiting for a lock to be released\n* `Active`: Connections with running queries.\n* `IDLE`: Connections which are currently not doing anything.\n* `IDLE in TX` Connections which are not doing anything, but have an unfinished (neither committed nor rolled back) transaction open.\n* `Unknown`: Connections where the user fetching the stats did not have the access rights to get more details.",
           "fieldConfig": {
             "defaults": {
@@ -2835,7 +2835,7 @@
             "$__all"
           ]
         },
-        "datasource": "{{data-source-name}}",
+        "datasource": "InfluxDB",
         "definition": "SHOW TAG VALUES WITH KEY = dbname",
         "description": null,
         "error": null,
@@ -2863,7 +2863,7 @@
             "$__all"
           ]
         },
-        "datasource": "{{data-source-name}}",
+        "datasource": "InfluxDB",
         "definition": "SHOW TAG VALUES WITH KEY = username",
         "description": null,
         "error": null,
@@ -2891,7 +2891,7 @@
             "$__all"
           ]
         },
-        "datasource": "{{data-source-name}}",
+        "datasource": "InfluxDB",
         "definition": "SHOW TAG VALUES WITH KEY = host",
         "description": null,
         "error": null,
