@@ -98,7 +98,7 @@ You should now see the dashboard. If no values appear yet, give it at lease 5
 minutes because the minimum "interval" is set to 5 minutes in almost every
 graph.
 
-.. _grafana-dashboard.json.template: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.0.post4/grafana-dashboard.json.template
+.. _grafana-dashboard.json.template: https://raw.githubusercontent.com/post-luxembourg/pgflux/v1.0.1/grafana-dashboard.json.template
 .. _fabric: https://fabfile.org
 
 
