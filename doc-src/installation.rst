@@ -21,5 +21,3 @@ open a connection to the PostgreSQL cluster to fetch the statistics. Example::
 
 The DSN value is passed directly into :py:func:`psycopg2.connect`. See its
 documentation for details on DSN formatting.
-
-
