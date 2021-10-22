@@ -49,5 +49,5 @@ setup(
         "Tracker": "https://github.com/post-luxembourg/pgflux/issues",
         "Documentation": "https://post-luxembourg.github.io/pgflux/",
     },
-    keywords={"influxdb", "postgresql"},
+    keywords=["influxdb", "postgresql"],
 )
