@@ -9,6 +9,10 @@ from pgflux.core import PgFluxException
 from pgflux.enums import Precision
 from pgflux.output.interface import Output
 
+import logging
+
+LOG = logging.getLogger(__name__)
+
 
 def send_to_influx(
     connection: http.client.HTTPConnection,
@@ -28,8 +32,18 @@ def send_to_influx(
     :return: A HTTP response
     """
     params_encoded = urllib.parse.urlencode(params)
-    connection.request("POST", f"/write?{params_encoded}", payload, headers)
+    method = "POST"
+    url = f"/write?{params_encoded}"
+    connection.request(method, url, payload, headers)
     response = connection.getresponse()
+    LOG.debug(
+        "HTTP %s %s (%d bytes) -> %r %s",
+        method,
+        url,
+        len(payload),
+        response.status,
+        response.reason,
+    )
     if response.status >= 400:
         raise PgFluxException(
             f"Unable to send data to InfluxDB ({response.read()})"
