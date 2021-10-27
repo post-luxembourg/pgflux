@@ -200,6 +200,7 @@ def connect() -> Connection:
     folder if it exists.
     """
     dsn = getenv("PGFLUX_POSTGRES_DSN", "")
+
     if not dsn:
         raise PgFluxException("PGFLUX_POSTGRES_DSN does not seem to be set.")
     with psycopg2.connect(dsn) as connection:  # type: ignore
@@ -334,7 +335,9 @@ def list_databases(connection: Any, exclude: List[str]) -> Iterable[str]:
             yield row
 
 
-def execute_query(query: str, exclude: List[str], output: "Output") -> None:
+def execute_query(
+    connection: Connection, query: str, exclude: List[str], output: "Output"
+) -> None:
     """
     Run the given query against the DB clusters excluding any databases where
     the name matches any regex in *exclude*.
@@ -348,18 +351,16 @@ def execute_query(query: str, exclude: List[str], output: "Output") -> None:
     scope = Scope(scope_str)
     queries = load_queries()
     result: List[Dict[str, str]] = []
-    with connect() as connection:
-        if scope == Scope.CLUSTER:
+
+    if scope == Scope.CLUSTER:
+        result.extend(execute_global(connection, queries.cluster, query_name))
+    elif scope == Scope.DB:
+        for dbname in list_databases(connection, exclude):
             result.extend(
-                execute_global(connection, queries.cluster, query_name)
+                execute_local(connection, queries.db, query_name, dbname)
             )
-        elif scope == Scope.DB:
-            for dbname in list_databases(connection, exclude):
-                result.extend(
-                    execute_local(connection, queries.db, query_name, dbname)
-                )
-        else:
-            raise PgFluxException(f"Unknown scope: {scope}")
+    else:
+        raise PgFluxException(f"Unknown scope: {scope}")
 
     for row in result:
         try:

@@ -1,9 +1,10 @@
 import argparse
 import logging
 import sys
-from typing import List, Optional, TextIO
+from typing import List, Optional, Set, TextIO
 
 from dotenv.main import load_dotenv
+from psycopg2.extensions import connection as Connection
 
 from pgflux import core
 from pgflux.output.interface import Output
@@ -137,6 +138,31 @@ def setup_logging(is_verbose: bool = False) -> None:  # pragma: no cover
     logging.basicConfig(level=logging.DEBUG, format=format)
 
 
+def run_queries(
+    connection: Connection,
+    queries: Set[str],
+    all_queries: bool,
+    exclude_pattern: List[str],
+    output: Output,
+):
+    if all_queries:
+        queries = {
+            f"{core.Scope.CLUSTER.value}:{query.query_name}"
+            for query in core.iter_query_files(core.Scope.CLUSTER)
+        }
+        queries |= {
+            f"{core.Scope.DB.value}:{query.query_name}"
+            for query in core.iter_query_files(core.Scope.DB)
+        }
+        for query in queries:
+            core.execute_query(connection, query, exclude_pattern, output)
+        LOG.debug("Done")
+    else:
+        for query in queries:
+            core.execute_query(connection, query, exclude_pattern, output)
+        LOG.debug("Done")
+
+
 def main() -> int:  # pragma: no cover
     """
     Main CLI entry-point of the script
@@ -157,20 +183,12 @@ def main() -> int:  # pragma: no cover
 
     output = Output.create(args.output)
 
-    if args.all:
-        queries = {
-            f"{core.Scope.CLUSTER.value}:{query.query_name}"
-            for query in core.iter_query_files(core.Scope.CLUSTER)
-        }
-        queries |= {
-            f"{core.Scope.DB.value}:{query.query_name}"
-            for query in core.iter_query_files(core.Scope.DB)
-        }
-        for query in queries:
-            core.execute_query(query, args.exclude, output)
-        LOG.debug("Done")
-    else:
-        for query in args.queries:
-            core.execute_query(query, args.exclude, output)
-        LOG.debug("Done")
+    with core.connect() as connection:
+        run_queries(
+            connection,  # type: ignore
+            set(args.queries),
+            args.all,
+            args.exclude,
+            output,
+        )
     return 0

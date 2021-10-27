@@ -1,8 +1,8 @@
-from http.client import HTTPConnection
 from typing import Tuple
 from unittest.mock import Mock, patch
 
 import pytest
+from psycopg2.extensions import connection as Connection
 
 import pgflux.core as core
 import pgflux.output.http as http
@@ -34,7 +34,11 @@ def mock_http_connection() -> Tuple[Mock, http.HTTPOutput]:
 def test_http_output():
     mock_output = Mock()
     mock_output.PRECISION = Precision.SECONDS
-    core.execute_query("cluster:connections", [], mock_output)
+    with core.connect() as db_connection:
+        db_connection: Connection
+        core.execute_query(
+            db_connection, "cluster:connections", [], mock_output
+        )
     mock_output.send.assert_called()  # type: ignore
 
 
