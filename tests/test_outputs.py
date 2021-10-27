@@ -1,4 +1,3 @@
-from http.client import HTTPConnection
 from typing import Tuple
 from unittest.mock import Mock, patch
 
