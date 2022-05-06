@@ -38,6 +38,7 @@ Documents
     dbselection
     grafana-dashboard
     development
+    changelog
     API <api/pgflux>
 
 
