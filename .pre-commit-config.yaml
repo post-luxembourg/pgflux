@@ -4,12 +4,12 @@
 exclude: "^docs/.*"
 repos:
   - repo: https://github.com/PyCQA/isort
-    rev: 5.9.3
+    rev: 5.10.1
     hooks:
       - id: isort
         args: ["--profile", "black"]
   - repo: https://github.com/psf/black
-    rev: 21.9b0
+    rev: 22.3.0
     hooks:
       - id: black
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -27,6 +27,6 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/regebro/pyroma
-    rev: "3.2"
+    rev: "4.0"
     hooks:
       - id: pyroma

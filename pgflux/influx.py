@@ -49,7 +49,7 @@ def row_to_influx(
     timestamp: int = 0
     for key, value in row.items():
         if key == "timestamp":
-            timestamp = int(value) * 10 ** precision.value
+            timestamp = int(value) * 10**precision.value
             continue
         if key.startswith("tag:"):
             tags.append(f"{key[4:]}={value}")
