@@ -16,8 +16,8 @@ def develop(context):
     Set up a development environment
     """
     context.run("[ -d env ] || python3 -m venv env", replace_env=False)
-    context.run("./env/bin/pip install -U pip")
-    context.run("./env/bin/pip install -e .[test,dev]")
+    context.run("./env/bin/pip install -U pip", replace_env=False)
+    context.run("./env/bin/pip install -e .[test,dev]", replace_env=False)
     context.run("[ -f .env ] || cp .env.template .env")
 
 
