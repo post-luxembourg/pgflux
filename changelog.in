@@ -11,6 +11,7 @@
 
 # version   ; type    ; subject                                                           ; issues  ;i;h;date      ;detail
 #--------------------------------------------------------------------------------------------------------------------------
+1.1.0       ; added   ; Add query to show size of each table in a database                ;         ; ; ;2022-05-06
 1.0.2       ; support ; Reduce the number of connections that are made against PostgreSQL ;         ; ; ;2021-10-27
 1.0.1       ; fixed   ; Clear queue HTTP data after flush (avoids duplicate data points)  ;         ; ; ;2021-10-22
 1.0.1       ; support ; Finish up initial documentation                                   ;         ; ; ;2021-10-22
