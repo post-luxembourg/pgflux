@@ -57,7 +57,7 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
         "-o",
         "--output",
         default="stdout",
-        help="Define where the data should be sent to.",
+        help="Define where the data should be sent to. Defaults to 'stdout'",
     )
     parser.add_argument(
         "--list-outputs",
